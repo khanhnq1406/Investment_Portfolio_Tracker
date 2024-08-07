@@ -6,4 +6,7 @@ const STATUS_CODE = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const OTP_EXPIRE = 60;
+
 exports.STATUS_CODE = STATUS_CODE;
+exports.OTP_EXPIRE = OTP_EXPIRE;

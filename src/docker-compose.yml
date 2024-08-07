@@ -47,6 +47,13 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: investment-redis-stack
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
 
 networks:
   app-network:

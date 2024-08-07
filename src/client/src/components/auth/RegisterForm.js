@@ -14,9 +14,13 @@ const RegisterForm = () => {
 
     // Password validation
     if (password.length < 6) {
-      setErrorMessage("Password length must be at least 6 characters");
+      const message = "Password length must be at least 6 characters";
+      const elementMessage = <div className="error-msg">{message}</div>;
+      return setErrorMessage(elementMessage);
     } else if (password !== retype) {
-      setErrorMessage("Passwords do not match");
+      const message = "Passwords do not match";
+      const elementMessage = <div className="error-msg">{message}</div>;
+      return setErrorMessage(elementMessage);
     }
 
     // Email validation
@@ -34,8 +38,12 @@ const RegisterForm = () => {
       }
       console.log(response);
     } catch (error) {
+      console.log(error);
       if (error.response.status === 400) {
-        setErrorMessage(error.response.data.message);
+        const elementMessage = (
+          <div className="error-msg">{error.response.data.message}</div>
+        );
+        return setErrorMessage(elementMessage);
       }
     }
   }
@@ -89,7 +97,7 @@ const RegisterForm = () => {
                 required={true}
               ></input>
             </div>
-            <div className="error-msg">{errorMessage}</div>
+            {errorMessage}
             <div className="form-group submit">
               <input type="submit" value="Register"></input>
             </div>
