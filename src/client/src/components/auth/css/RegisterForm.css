@@ -89,3 +89,39 @@
   font-size: 14px;
   color: #c3151c;
 }
+.error-msg.notification {
+  color: #f5f7fd;
+  text-align: center;
+}
+.login-redirect.otp a {
+  text-decoration: underline;
+}
+
+.form.success .title {
+  color: #00a445;
+}
+
+.form.success {
+  text-align: center;
+}
+.form.success .title {
+  margin-bottom: 3vh;
+}
+
+.form.success button {
+  margin-top: 3vh;
+  font-weight: 600;
+  background-color: #00a445;
+  border: none;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 1vh 2vw;
+  font-size: 2.5vh;
+  color: #f5f7fd;
+}
+.form.success button:hover {
+  background-color: #008148;
+}
+.form.success button:active {
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.8);
+}

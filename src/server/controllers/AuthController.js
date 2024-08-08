@@ -26,15 +26,15 @@ class AuthController {
         const subject = "Email Verification";
         const message = `Your OTP code is: ${otp}`;
 
-        sendEmail(email, subject, message);
+        // sendEmail(email, subject, message);
         await client.connect();
         await client.set(email, JSON.stringify(values));
         client.expire(email, OTP_EXPIRE);
-        // const user = new User({ name, email, password });
-        // await user.save();
+        console.log(otp);
+
         return res
           .status(STATUS_CODE.CREATED)
-          .json({ message: "User successfully created" });
+          .json({ message: "OTP successfully sent" });
       } else {
         return res
           .status(STATUS_CODE.BAD_REQUEST)
@@ -48,6 +48,75 @@ class AuthController {
     }
   }
 
+  // [GET] resendOtp
+  async resendOtp(req, res) {
+    const { email } = req.body;
+    try {
+      const otp = generateOTP();
+      console.log(otp);
+      const client = redis.createClient({
+        url: "redis://host.docker.internal:6379",
+      });
+      await client.connect();
+      const subject = "Email Verification";
+      const message = `Your OTP code is: ${otp}`;
+
+      // sendEmail(email, subject, message);
+      const oldOtpValues = JSON.parse(await client.get(email));
+      if (oldOtpValues === null) {
+        return res
+          .status(STATUS_CODE.NOT_FOUND)
+          .json({ message: "Register session has expired" });
+      }
+      const newOtpValues = {
+        name: oldOtpValues.name,
+        email: oldOtpValues.email,
+        password: oldOtpValues.password,
+        otp: otp,
+        is_verified: false,
+      };
+      await client.set(email, JSON.stringify(newOtpValues));
+      client.expire(email, OTP_EXPIRE);
+      return res
+        .status(STATUS_CODE.CREATED)
+        .json({ message: "OTP successfully re-sent" });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
+        .json({ message: "An error occurred while re-sending OTP" });
+    }
+  }
+
+  async verifyOtp(req, res) {
+    const { otp, email } = req.body;
+    const client = redis.createClient({
+      url: "redis://host.docker.internal:6379",
+    });
+    await client.connect();
+
+    const userRedis = JSON.parse(await client.get(email));
+    if (userRedis === null) {
+      return res
+        .status(STATUS_CODE.NOT_FOUND)
+        .json({ message: "Register session has expired" });
+    }
+    if (otp === userRedis.otp) {
+      const fullname = userRedis.name;
+      const email = userRedis.email;
+      const password = userRedis.password;
+      const createUser = new User({ fullname, email, password });
+      const userCreated = await createUser.save();
+      console.log(userCreated);
+      return res
+        .status(STATUS_CODE.CREATED)
+        .json({ message: "User successfully created" });
+    } else {
+      return res
+        .status(STATUS_CODE.BAD_REQUEST)
+        .json({ message: "Invalid OTP" });
+    }
+  }
   async deleteUser(req, res, next) {
     const { email } = req.body;
     try {
@@ -96,6 +165,20 @@ class AuthController {
       console.log(value);
     }
     res.json(JSON.parse(value));
+  }
+
+  async getAllData(req, res) {
+    const client = redis.createClient({
+      url: "redis://host.docker.internal:6379",
+    });
+    await client.connect();
+    const keys = await client.keys("*");
+    keys.forEach(async (key) => {
+      const value = await client.get(key);
+      console.log(`${key}: ${value}`);
+    });
+
+    return res.send("Success");
   }
 }
 
