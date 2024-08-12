@@ -6,8 +6,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const bcrypt = require("bcryptjs");
-
 const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [registerState, setRegisterState] = useState(RegisterState.Register);
@@ -33,9 +31,6 @@ const RegisterForm = () => {
     }
 
     // Email validation
-    const saltRounds = 10;
-    const hashedPasword = await bcrypt.hash(password, saltRounds);
-    console.log(hashedPasword);
     try {
       const response = await axios.post("http://localhost:5000/register", {
         name: name,
@@ -178,7 +173,7 @@ const RegisterForm = () => {
               </div>
             </form>
             <div className="login-redirect">
-              Already a member? <a href="#">Login</a>
+              Already a member? <a onClick={redirectToLogin}>Login</a>
             </div>
           </div>
         ) : registerState === RegisterState.OTP ? (

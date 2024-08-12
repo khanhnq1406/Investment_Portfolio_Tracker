@@ -43,6 +43,9 @@
   margin-top: 10px;
 }
 
+.form.login .form-group {
+  margin-top: 20px;
+}
 .form .form-group input {
   font-weight: 200;
   font-size: 14px;
@@ -70,6 +73,10 @@
   width: 40%;
   padding-left: 5vw;
 }
+.container .image.login {
+  width: 35%;
+  padding-left: 5vw;
+}
 .login-redirect {
   margin-top: 10px;
   text-align: center;
@@ -78,7 +85,9 @@
 .login-redirect a {
   color: #f5f7fd;
   font-weight: 500;
+  text-decoration: underline;
 }
+
 .form-group .submit {
   display: flex;
   align-items: center;
@@ -124,4 +133,10 @@
 }
 .form.success button:active {
   box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.8);
+}
+
+.login-redirect.forgot-password a {
+  text-decoration: none;
+  font-weight: 200;
+  font-size: 15px;
 }

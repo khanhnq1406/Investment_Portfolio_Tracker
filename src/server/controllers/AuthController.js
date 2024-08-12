@@ -5,10 +5,47 @@ const { OTP_EXPIRE } = require("../utils/constants");
 const redis = require("redis");
 const generateOTP = require("../utils/otp_generator");
 const { sendEmail } = require("../utils/nodemailer");
+
+const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
 class AuthController {
+  // [POST] /login
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const findUser = await User.findOne({ email: email });
+      console.log(findUser);
+      if (!findUser) {
+        return res
+          .status(STATUS_CODE.NOT_FOUND)
+          .json({ message: "User not found!" });
+      }
+      const isPasswordValid = await argon2.verify(findUser.password, password);
+      if (isPasswordValid) {
+        const accessToken = await jwt.sign(
+          { email: email },
+          process.env.ACCESS_TOKEN_SECRET
+        );
+        return res
+          .status(STATUS_CODE.CREATED)
+          .json({ message: "Login successful", accessToken: accessToken });
+      } else {
+        return res
+          .status(STATUS_CODE.BAD_REQUEST)
+          .json({ message: "Password incorrect" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server error" });
+    }
+  }
+
   // [POST] /register
   async register(req, res, next) {
     const { name, email, password } = req.body;
+    const hashedPassword = await argon2.hash(password);
     const hasEmail = await User.findOne({ email: email });
     try {
       if (hasEmail === null) {
@@ -16,7 +53,7 @@ class AuthController {
         const values = {
           name: name,
           email: email,
-          password: password,
+          password: hashedPassword,
           otp: otp,
           is_verified: false,
         };
