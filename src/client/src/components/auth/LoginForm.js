@@ -1,16 +1,23 @@
-import "./css/RegisterForm.css";
+import { STATUS_CODE } from "../../utils/constants";
 
-import { useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import "./css/AuthForm.css";
+
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const { loginUser } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  function handleSubmitLogin(event) {
+  async function handleSubmitLogin(event) {
     event.preventDefault();
     const email = event.target["email"].value;
     const password = event.target["password"].value;
+    const response = await loginUser(email, password);
+    if (response.status !== STATUS_CODE.OK) {
+      setErrorMessage(response.message);
+    }
   }
   const redirectToRegister = () => {
     navigate("/register");

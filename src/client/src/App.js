@@ -1,17 +1,27 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import RegisterForm from "./components/auth/RegisterForm";
-import LoginForm from "./components/auth/LoginForm";
-
+import AuthContextProvider from "./contexts/AuthContext";
+import Auth from "./views/Auth";
+import Home from "./views/Home";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import "./App.css";
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/register" element={<RegisterForm />} />
-        <Route path="/login" element={<LoginForm />} />
-      </Routes>
-    </Router>
+    <AuthContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Auth authRoute="login" />} />
+          <Route path="/register" element={<Auth authRoute="register" />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute redirectTo="/login">
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthContextProvider>
   );
 }
 

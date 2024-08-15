@@ -1,4 +1,4 @@
-import "./css/RegisterForm.css";
+import "./css/AuthForm.css";
 import RegisterState from "../../utils/constants";
 import { STATUS_CODE } from "../../utils/constants";
 
@@ -32,7 +32,7 @@ const RegisterForm = () => {
 
     // Email validation
     try {
-      const response = await axios.post("http://localhost:5000/register", {
+      const response = await axios.post("http://localhost:5000/auth/register", {
         name: name,
         email: email,
         password: password,
@@ -42,7 +42,6 @@ const RegisterForm = () => {
         setRegisterState(RegisterState.OTP);
         setErrorMessage("");
       }
-      console.log(response);
     } catch (error) {
       console.log(error);
       if (error.response.status === STATUS_CODE.BAD_REQUEST) {
@@ -57,9 +56,12 @@ const RegisterForm = () => {
   async function handleResendOtp(event) {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/resendOtp", {
-        email: registerData.email,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/auth/resendOtp",
+        {
+          email: registerData.email,
+        }
+      );
       if (response.status === STATUS_CODE.CREATED) {
         const message = "The OTP is re-sent to your email";
         const elementMessage = (
@@ -92,10 +94,13 @@ const RegisterForm = () => {
     event.preventDefault();
     const otp = event.target["otp"].value;
     try {
-      const response = await axios.post("http://localhost:5000/verifyOtp", {
-        otp: otp,
-        email: registerData.email,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/auth/verifyOtp",
+        {
+          otp: otp,
+          email: registerData.email,
+        }
+      );
       if (response.status === STATUS_CODE.CREATED) {
         setRegisterState(RegisterState.Success);
       }

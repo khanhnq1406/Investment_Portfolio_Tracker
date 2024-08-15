@@ -1,5 +1,5 @@
 const authRouter = require("./auth");
 function route(app) {
-  app.use(authRouter);
+  app.use("/auth", authRouter);
 }
 module.exports = route;

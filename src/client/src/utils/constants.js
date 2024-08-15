@@ -11,6 +11,8 @@ const STATUS_CODE = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+export const LOCAL_STORAGE_TOKEN_NAME = "token";
+
 export default RegisterState;
 
 export { STATUS_CODE };

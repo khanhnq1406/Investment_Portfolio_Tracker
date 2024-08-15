@@ -9,12 +9,29 @@ const { sendEmail } = require("../utils/nodemailer");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 class AuthController {
+  // [GET] /
+  async index(req, res) {
+    try {
+      const email = req.email;
+      const user = await User.findOne({ email });
+      if (user) {
+        return res.status(STATUS_CODE.OK).json({ name: user.fullname });
+      } else {
+        return res
+          .status(STATUS_CODE.NOT_FOUND)
+          .json({ message: "User not found" });
+      }
+    } catch (error) {
+      return res
+        .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server error" });
+    }
+  }
   // [POST] /login
   async login(req, res) {
     try {
       const { email, password } = req.body;
       const findUser = await User.findOne({ email: email });
-      console.log(findUser);
       if (!findUser) {
         return res
           .status(STATUS_CODE.NOT_FOUND)
@@ -27,7 +44,7 @@ class AuthController {
           process.env.ACCESS_TOKEN_SECRET
         );
         return res
-          .status(STATUS_CODE.CREATED)
+          .status(STATUS_CODE.OK)
           .json({ message: "Login successful", accessToken: accessToken });
       } else {
         return res
@@ -144,7 +161,6 @@ class AuthController {
       const password = userRedis.password;
       const createUser = new User({ fullname, email, password });
       const userCreated = await createUser.save();
-      console.log(userCreated);
       return res
         .status(STATUS_CODE.CREATED)
         .json({ message: "User successfully created" });
