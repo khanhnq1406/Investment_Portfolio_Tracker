@@ -1,10 +1,14 @@
 const User = require("../models/User");
-const { STATUS_CODE } = require("../utils/constants");
-const { OTP_EXPIRE } = require("../utils/constants");
+const {
+  STATUS_CODE,
+  OTP_EXPIRE,
+  FORGOT_PASSWORD_KEY,
+} = require("../utils/constants");
 
 const redis = require("redis");
 const generateOTP = require("../utils/otp_generator");
 const { sendEmail } = require("../utils/nodemailer");
+const connectRedis = require("../utils/redis");
 
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
@@ -74,14 +78,11 @@ class AuthController {
           otp: otp,
           is_verified: false,
         };
-        const client = redis.createClient({
-          url: "redis://host.docker.internal:6379",
-        });
+        const client = await connectRedis();
         const subject = "Email Verification";
         const message = `Your OTP code is: ${otp}`;
 
         // sendEmail(email, subject, message);
-        await client.connect();
         await client.set(email, JSON.stringify(values));
         client.expire(email, OTP_EXPIRE);
         console.log(otp);
@@ -108,10 +109,7 @@ class AuthController {
     try {
       const otp = generateOTP();
       console.log(otp);
-      const client = redis.createClient({
-        url: "redis://host.docker.internal:6379",
-      });
-      await client.connect();
+      const client = await connectRedis();
       const subject = "Email Verification";
       const message = `Your OTP code is: ${otp}`;
 
@@ -144,11 +142,7 @@ class AuthController {
 
   async verifyOtp(req, res) {
     const { otp, email } = req.body;
-    const client = redis.createClient({
-      url: "redis://host.docker.internal:6379",
-    });
-    await client.connect();
-
+    const client = await connectRedis();
     const userRedis = JSON.parse(await client.get(email));
     if (userRedis === null) {
       return res
@@ -170,68 +164,87 @@ class AuthController {
         .json({ message: "Invalid OTP" });
     }
   }
-  async deleteUser(req, res, next) {
+
+  async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+      const clientRedis = await connectRedis();
+      const redisKey = `${FORGOT_PASSWORD_KEY}_${email}`;
+      async function setOtp(key) {
+        const otp = generateOTP();
+        await clientRedis.set(key, otp);
+        clientRedis.expire(key, OTP_EXPIRE);
+        return otp;
+      }
+
+      const userRedis = JSON.parse(await clientRedis.get(redisKey));
+      if (userRedis === null) {
+        const userDb = await User.findOne({ email });
+        if (userDb === null) {
+          return res
+            .status(STATUS_CODE.NOT_FOUND)
+            .json({ message: "User not found" });
+        } else {
+          const otp = await setOtp(redisKey);
+          console.log("OTP from DB");
+          const subject = "Email Verification";
+          const message = `Your OTP code is: ${otp}`;
+          // const sendEmail = await sendEmail(email, subject, message);
+          return res
+            .status(STATUS_CODE.CREATED)
+            .json({ message: "OTP successfully sent" });
+        }
+      } else {
+        const otp = await setOtp(redisKey);
+        console.log("OTP from Redis");
+
+        const subject = "Email Verification";
+        const message = `Your OTP code is: ${otp}`;
+        // const sendEmail = await sendEmail(email, subject, message);
+        return res
+          .status(STATUS_CODE.CREATED)
+          .json({ message: "OTP successfully sent" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
+        .json({ message: "An error occurred while sending OTP" });
+    }
+  }
+
+  async resendRecoveryOtp(req, res) {
     const { email } = req.body;
     try {
-      const deletedUser = await User.findOneAndDelete({ email: email });
-      if (!deletedUser) {
+      const redisKey = `${FORGOT_PASSWORD_KEY}_${email}`;
+      const otp = generateOTP();
+      console.log("resendRecoveryOtp: ", otp);
+      const client = await connectRedis();
+      const subject = "Email Verification";
+      const message = `Your OTP code is: ${otp}`;
+
+      // sendEmail(email, subject, message);
+      const oldOtpValues = JSON.parse(await client.get(redisKey));
+      if (oldOtpValues === null) {
         return res
           .status(STATUS_CODE.NOT_FOUND)
-          .json({ message: "User not found" });
+          .json({ message: "Register session has expired" });
       }
+      const newOtpValues = {
+        email: oldOtpValues.email,
+        otp: otp,
+      };
+      await client.set(redisKey, JSON.stringify(newOtpValues));
+      client.expire(redisKey, OTP_EXPIRE);
       return res
-        .status(STATUS_CODE.OK)
-        .json({ message: "User successfully deleted" });
+        .status(STATUS_CODE.CREATED)
+        .json({ message: "OTP successfully re-sent" });
     } catch (error) {
+      console.log(error);
       return res
         .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
-        .json({ message: "An error occurred while deleting the user" });
+        .json({ message: "An error occurred while re-sending OTP" });
     }
-  }
-
-  async getAllUser(req, res, next) {
-    try {
-      const users = await User.find();
-      res.status(STATUS_CODE.OK).json(users);
-    } catch (error) {
-      res
-        .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
-        .json({ message: "An error occurred while fetching users" });
-    }
-  }
-
-  async redisTesting(req, res) {
-    const client = redis.createClient({
-      url: "redis://host.docker.internal:6379",
-    });
-    await client.connect();
-    // const value = await client.del("testingKey");
-    const value = await client.get("testingKey");
-    if (!value) {
-      await client.set(
-        "testingKey",
-        JSON.stringify({ value1: "testingValue1", value2: 1 })
-      );
-      const expireTime = 10;
-      client.expire("testingKey", expireTime);
-    } else {
-      console.log(value);
-    }
-    res.json(JSON.parse(value));
-  }
-
-  async getAllData(req, res) {
-    const client = redis.createClient({
-      url: "redis://host.docker.internal:6379",
-    });
-    await client.connect();
-    const keys = await client.keys("*");
-    keys.forEach(async (key) => {
-      const value = await client.get(key);
-      console.log(`${key}: ${value}`);
-    });
-
-    return res.send("Success");
   }
 }
 

@@ -1,5 +1,6 @@
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
@@ -22,6 +23,7 @@ const Auth = ({ authRoute }) => {
       <>
         {authRoute === "login" && <LoginForm />}
         {authRoute === "register" && <RegisterForm />}
+        {authRoute === "forgot-password" && <ForgotPasswordForm />}
       </>
     );
   return body;

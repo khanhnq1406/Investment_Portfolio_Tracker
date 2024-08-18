@@ -12,6 +12,10 @@ function App() {
           <Route path="/login" element={<Auth authRoute="login" />} />
           <Route path="/register" element={<Auth authRoute="register" />} />
           <Route
+            path="/forgot-password"
+            element={<Auth authRoute="forgot-password" />}
+          />
+          <Route
             path="/"
             element={
               <ProtectedRoute redirectTo="/login">

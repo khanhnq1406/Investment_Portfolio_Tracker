@@ -1,6 +1,9 @@
 import "./css/AuthForm.css";
-import RegisterState from "../../utils/constants";
-import { STATUS_CODE } from "../../utils/constants";
+import {
+  STATUS_CODE,
+  REGISTER_STATE,
+  BACKEND_URL,
+} from "../../utils/constants";
 
 import { useState } from "react";
 import axios from "axios";
@@ -8,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
-  const [registerState, setRegisterState] = useState(RegisterState.Register);
+  const [registerState, setRegisterState] = useState(REGISTER_STATE.Register);
   const [registerData, setRegisterData] = useState(null);
   const navigate = useNavigate();
 
@@ -32,14 +35,14 @@ const RegisterForm = () => {
 
     // Email validation
     try {
-      const response = await axios.post("http://localhost:5000/auth/register", {
+      const response = await axios.post(`${BACKEND_URL}/auth/register`, {
         name: name,
         email: email,
         password: password,
       });
       if (response.status === STATUS_CODE.CREATED) {
         setRegisterData({ name: name, email: email, password: password });
-        setRegisterState(RegisterState.OTP);
+        setRegisterState(REGISTER_STATE.OTP);
         setErrorMessage("");
       }
     } catch (error) {
@@ -56,12 +59,9 @@ const RegisterForm = () => {
   async function handleResendOtp(event) {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/auth/resendOtp",
-        {
-          email: registerData.email,
-        }
-      );
+      const response = await axios.post(`${BACKEND_URL}/auth/resendOtp`, {
+        email: registerData.email,
+      });
       if (response.status === STATUS_CODE.CREATED) {
         const message = "The OTP is re-sent to your email";
         const elementMessage = (
@@ -94,15 +94,12 @@ const RegisterForm = () => {
     event.preventDefault();
     const otp = event.target["otp"].value;
     try {
-      const response = await axios.post(
-        "http://localhost:5000/auth/verifyOtp",
-        {
-          otp: otp,
-          email: registerData.email,
-        }
-      );
+      const response = await axios.post(`${BACKEND_URL}/auth/verifyOtp`, {
+        otp: otp,
+        email: registerData.email,
+      });
       if (response.status === STATUS_CODE.CREATED) {
-        setRegisterState(RegisterState.Success);
+        setRegisterState(REGISTER_STATE.Success);
       }
     } catch (error) {
       if (error.response.status === STATUS_CODE.NOT_FOUND) {
@@ -124,7 +121,7 @@ const RegisterForm = () => {
   return (
     <div className="wrapper">
       <div className="container register">
-        {registerState === RegisterState.Register ? (
+        {registerState === REGISTER_STATE.Register ? (
           <div className="form register">
             <div className="title">Create new account</div>
             <form onSubmit={handleSubmitRegister}>
@@ -181,7 +178,7 @@ const RegisterForm = () => {
               Already a member? <a onClick={redirectToLogin}>Login</a>
             </div>
           </div>
-        ) : registerState === RegisterState.OTP ? (
+        ) : registerState === REGISTER_STATE.OTP ? (
           <div className="form register">
             <div className="title">OTP Verification</div>
             <div>Please enter the OTP sent to your email</div>

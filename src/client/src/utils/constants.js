@@ -1,9 +1,17 @@
-const RegisterState = Object.freeze({
+export const REGISTER_STATE = Object.freeze({
   Register: 1,
   OTP: 2,
   Success: 3,
 });
-const STATUS_CODE = {
+
+export const RECOVERY_PASS_STATE = Object.freeze({
+  Input: 1,
+  OTP: 2,
+  CreateNewPassword: 3,
+  Success: 4,
+});
+
+export const STATUS_CODE = {
   OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
@@ -13,6 +21,6 @@ const STATUS_CODE = {
 
 export const LOCAL_STORAGE_TOKEN_NAME = "token";
 
-export default RegisterState;
+export const BACKEND_URL = "http://localhost:5000";
 
-export { STATUS_CODE };
+export default REGISTER_STATE;

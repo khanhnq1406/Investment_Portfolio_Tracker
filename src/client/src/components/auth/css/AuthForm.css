@@ -77,6 +77,10 @@
   width: 35%;
   padding-left: 5vw;
 }
+.container .image.checked {
+  width: 20%;
+  padding-left: 5vw;
+}
 .login-redirect {
   margin-top: 10px;
   text-align: center;

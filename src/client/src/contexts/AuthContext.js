@@ -1,5 +1,9 @@
 import { useReducer, useEffect, createContext } from "react";
-import { LOCAL_STORAGE_TOKEN_NAME, STATUS_CODE } from "../utils/constants";
+import {
+  LOCAL_STORAGE_TOKEN_NAME,
+  STATUS_CODE,
+  BACKEND_URL,
+} from "../utils/constants";
 import setAuthTokenHeader from "../utils/setHeaderToken";
 import { authReducer } from "./AuthReducer";
 import axios from "axios";
@@ -15,7 +19,7 @@ const AuthContextProvider = ({ children }) => {
       setAuthTokenHeader(localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME));
     }
     try {
-      const response = await axios.get("http://localhost:5000/auth/");
+      const response = await axios.get(`${BACKEND_URL}/auth/`);
 
       if (response.status === STATUS_CODE.OK) {
         dispatch({
@@ -44,7 +48,7 @@ const AuthContextProvider = ({ children }) => {
   // Login
   const loginUser = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
+      const response = await axios.post(`${BACKEND_URL}/auth/login`, {
         email: email,
         password: password,
       });

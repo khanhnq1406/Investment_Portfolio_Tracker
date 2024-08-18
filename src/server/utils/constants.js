@@ -8,5 +8,8 @@ const STATUS_CODE = {
 
 const OTP_EXPIRE = 60;
 
+const FORGOT_PASSWORD_KEY = "forgotPassword";
+
 exports.STATUS_CODE = STATUS_CODE;
 exports.OTP_EXPIRE = OTP_EXPIRE;
+exports.FORGOT_PASSWORD_KEY = FORGOT_PASSWORD_KEY;
