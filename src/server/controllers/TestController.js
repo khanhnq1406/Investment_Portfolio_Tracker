@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { STATUS_CODE } = require("../utils/constants");
+const { STATUS_CODE, DOCKER_HOST } = require("../utils/constants");
 
 const redis = require("redis");
 
@@ -36,7 +36,7 @@ class TestController {
 
   async redisTesting(req, res) {
     const client = redis.createClient({
-      url: "redis://host.docker.internal:6379",
+      url: `redis://${DOCKER_HOST}:6379`,
     });
     await client.connect();
     // const value = await client.del("testingKey");
@@ -56,7 +56,7 @@ class TestController {
 
   async getAllData(req, res) {
     const client = redis.createClient({
-      url: "redis://host.docker.internal:6379",
+      url: `redis://${DOCKER_HOST}:6379`,
     });
     await client.connect();
     const keys = await client.keys("*");

@@ -13,6 +13,7 @@ COPY package*.json ./
 
 RUN npm install --silent
 
+RUN chown node:node node_modules/
 # copy local files to app folder
 COPY . .
 

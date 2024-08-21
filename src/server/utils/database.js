@@ -1,7 +1,8 @@
+const { DOCKER_HOST } = require("./constants");
 const mongoose = require("mongoose");
 
 const connectDatabase = () => {
-  mongoose.connect("mongodb://host.docker.internal/investment-db", {
+  mongoose.connect(`mongodb://${DOCKER_HOST}/investment-db`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

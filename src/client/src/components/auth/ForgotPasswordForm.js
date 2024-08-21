@@ -37,8 +37,35 @@ const ForgotPasswordForm = () => {
     }
   }
 
-  const handleSubmitOtp = (event) => {
+  const handleSubmitOtp = async (event) => {
     event.preventDefault();
+    const otp = event.target["otp"].value;
+    try {
+      const response = await axios.post(`${BACKEND_URL}/auth/verifyRecoveryOtp`, {
+        otp: otp,
+        email: recoveryInfo.email,
+      });
+      if (response.status === STATUS_CODE.OK) {
+        setRecoveryState(RECOVERY_PASS_STATE.CreateNewPassword);
+        setErrorMessage(null);
+      }
+    } catch (error) {
+      if (error.response.status === STATUS_CODE.NOT_FOUND) {
+        const message =
+          "Your recovery password session has expired. Please refresh the page";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      } else if (error.response.status === STATUS_CODE.BAD_REQUEST) {
+        const message = "Invalid OTP! Please retry";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      }
+      else {
+        const message = "The server cannot be reached, please try again.";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      }
+    }
   };
   async function handleResendOtp(event) {
     event.preventDefault();
@@ -76,8 +103,46 @@ const ForgotPasswordForm = () => {
       }
     }
   }
-  const handleSubmitPassword = (event) => {
+  const handleSubmitPassword = async (event) => {
     event.preventDefault();
+    const password = event.target["password"].value;
+    const retype = event.target["retype"].value;
+    // Password validation
+    if (password.length < 6) {
+      const message = "Password length must be at least 6 characters";
+      const elementMessage = <div className="error-msg">{message}</div>;
+      return setErrorMessage(elementMessage);
+    } else if (password !== retype) {
+      const message = "Passwords do not match";
+      const elementMessage = <div className="error-msg">{message}</div>;
+      return setErrorMessage(elementMessage);
+    }
+    try {
+      const response = await axios.post(`${BACKEND_URL}/auth/createNewPassword`,
+      {
+        email: recoveryInfo.email,
+        password: password
+      })
+      if (response.status === STATUS_CODE.CREATED) {
+        setRecoveryState(RECOVERY_PASS_STATE.Success);
+      }
+    } catch (error) {
+      if (error.response.status === STATUS_CODE.NOT_FOUND) {
+        const message =
+          "Your recovery password session has expired. Please refresh the page";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      } else if (error.response.status === STATUS_CODE.BAD_REQUEST) {
+        const message = "Unable to reset password. Please try again";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      }
+      else {
+        const message = "The server cannot be reached, please try again.";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      }
+    }
   };
   const redirectToLogin = () => {
     navigate("/login");

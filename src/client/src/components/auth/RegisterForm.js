@@ -112,6 +112,11 @@ const RegisterForm = () => {
         const elementMessage = <div className="error-msg">{message}</div>;
         setErrorMessage(elementMessage);
       }
+      else {
+        const message = "The server cannot be reached, please try again.";
+        const elementMessage = <div className="error-msg">{message}</div>;
+        setErrorMessage(elementMessage);
+      }
     }
   }
 
