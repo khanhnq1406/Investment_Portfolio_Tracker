@@ -1,8 +1,8 @@
-const { DOCKER_HOST } = require("./constants");
+const { MONGODB_URI } = require("./constants");
 const mongoose = require("mongoose");
 
 const connectDatabase = () => {
-  mongoose.connect(`mongodb://${DOCKER_HOST}/investment-db`, {
+  mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

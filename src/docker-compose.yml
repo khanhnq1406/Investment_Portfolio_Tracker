@@ -20,14 +20,15 @@ services:
       - NODE_ENV=development
     networks:
       - app-network
-  mongo:
-    image: mongo
-    volumes:
-      - data-volume:/data/db
-    ports:
-      - "27017:27017"
-    networks:
-      - app-network
+  # NOTE: use MongoDB cloud
+  # mongo:
+  #   image: mongo
+  #   volumes:
+  #     - data-volume:/data/db
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - app-network
   client:
     build:
       context: ./client

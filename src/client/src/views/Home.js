@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import "../components/css/Home.css";
+
+import Navbar from "../components/layout/Navbar";
 const Home = () => {
   const { logoutUser } = useContext(AuthContext);
   return (
-    <div>
-      <h1>This is Home</h1>
-      <button onClick={(e) => logoutUser()}>Logout</button>
+    <div className="home">
+      <Navbar />
     </div>
   );
 };

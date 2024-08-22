@@ -1,0 +1,23 @@
+.navbar {
+  color: #f5f7fd;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 4vh;
+}
+
+.logo .title {
+  font-style: italic;
+}
+
+.navbar .navigate a {
+  text-decoration: none;
+  color: #f5f7fd;
+}

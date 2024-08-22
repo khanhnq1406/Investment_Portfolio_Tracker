@@ -144,3 +144,16 @@
   font-weight: 200;
   font-size: 15px;
 }
+
+@media only screen and (max-width: 800px) {
+  .container .image img {
+    display: none;
+  }
+  .form {
+    width: 100%;
+    padding-right: 5vw;
+  }
+  .container {
+    flex-wrap: wrap;
+  }
+}

@@ -1,4 +1,4 @@
-import "./css/AuthForm.css";
+import "../css/AuthForm.css";
 import {
   STATUS_CODE,
   REGISTER_STATE,
@@ -111,8 +111,7 @@ const RegisterForm = () => {
         const message = "Invalid OTP! Please retry";
         const elementMessage = <div className="error-msg">{message}</div>;
         setErrorMessage(elementMessage);
-      }
-      else {
+      } else {
         const message = "The server cannot be reached, please try again.";
         const elementMessage = <div className="error-msg">{message}</div>;
         setErrorMessage(elementMessage);
