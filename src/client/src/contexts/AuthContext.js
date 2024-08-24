@@ -6,6 +6,8 @@ import {
 } from "../utils/constants";
 import setAuthTokenHeader from "../utils/setHeaderToken";
 import { authReducer } from "./AuthReducer";
+import { addUser } from "../redux/actions";
+import { store } from "../redux/store";
 import axios from "axios";
 export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
@@ -30,6 +32,7 @@ const AuthContextProvider = ({ children }) => {
             user: response.data.name,
           },
         });
+        store.dispatch(addUser(response.data.name));
       }
     } catch (error) {
       localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
@@ -38,6 +41,7 @@ const AuthContextProvider = ({ children }) => {
         type: "SET_AUTH",
         payload: { isAuthenticated: false, user: null },
       });
+      store.dispatch(addUser(null));
     }
   };
 
@@ -58,7 +62,6 @@ const AuthContextProvider = ({ children }) => {
           response.data.accessToken
         );
         await loadUser();
-
         return { status: STATUS_CODE.OK, message: null };
       }
     } catch (error) {
@@ -83,6 +86,7 @@ const AuthContextProvider = ({ children }) => {
       type: "SET_AUTH",
       payload: { isAuthenticated: false, user: null },
     });
+    store.dispatch(addUser(null));
   };
 
   // Context data
