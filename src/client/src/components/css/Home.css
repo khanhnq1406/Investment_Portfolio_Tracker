@@ -1,23 +1,139 @@
 .navbar {
   color: #f5f7fd;
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: auto auto auto;
+  margin: 2vh 1vw;
+}
+
+.navbar .logo {
   display: flex;
   align-items: center;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
+.navbar .logo img {
+  width: 7vh;
 }
 
-.logo img {
-  width: 4vh;
-}
-
-.logo .title {
+.navbar .logo .title {
   font-style: italic;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .navbar .navigate a {
   text-decoration: none;
   color: #f5f7fd;
+  margin: 0px 3vw;
+  font-weight: 500;
+}
+
+.navbar .navigate .dashboard:hover,
+.navbar .navigate .history:hover,
+.navbar .navigate .add-transaction:hover,
+.navbar .navigate .watchlist:hover {
+  color: #00A445;
+}
+
+.navbar .setting {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .setting .logout {
+  margin: 0 1vw;
+}
+.navbar .setting .logout button {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  padding: 25% 25%;
+}
+
+.navbar .setting .logout button:hover {
+  background-color: #1B232D;
+  border-radius: 5px;
+}
+.navbar .setting .logout button img {
+  width: 4vh;
+}
+
+hr.navbar-line {
+  width: 100%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  height: 1px;
+}
+
+@media only screen and (min-width: 850px) {
+  .menu {
+    display: none;
+  }
+
+  .navigate {
+    display: block !important;
+  }
+
+  hr.navigate-line {
+    display: none !important;
+  }
+
+  .setting {
+    display: flex !important;
+  }
+}
+@media only screen and (max-width: 850px) {
+  .menu button {
+    background-color: transparent;
+    border: none;
+    margin: 0 1vw;
+  }
+
+  .menu button:hover {
+    background-color: #1B232D;
+    border-radius: 5px;
+  }
+
+  .menu button img {
+    width: 4vh !important; 
+  }
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+  }
+
+  .navbar .logo, .navbar .navigate,  .navbar .setting  {
+    margin: 1vh 0;
+  }
+
+  .navbar .navigate {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .navbar .logo {
+    width: 100%;
+  }
+
+  .navbar .navigate a {
+    width: 100%;
+  }
+
+  hr.navigate-line {
+    width: 100%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 1px;
+    margin-left: 3vw;
+    margin-right: 3vw;
+  }
+
+  .setting {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }

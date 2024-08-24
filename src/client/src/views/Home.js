@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="home">
       <Navbar />
-      <button onClick={logoutUser}>logout</button>
+      <hr className="navbar-line"/>
     </div>
   );
 };
