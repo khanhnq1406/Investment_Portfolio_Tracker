@@ -1,0 +1,101 @@
+.portfolio-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.summary {
+  color: #f5f7fd;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 10vw;
+}
+
+.summary .title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary .title button {
+  background-color: #f5f7fd;
+  border: 0;
+  border-radius: 3px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 5px 10px;
+}
+
+.summary .title button:hover {
+  background-color: #ffffff;
+}
+
+.summary .title button:active {
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.8);
+}
+.summary .title button img {
+  width: 15px;
+}
+
+.summary .title button div {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+}
+
+.summary .title .content {
+  display: flex;
+  align-items: center;
+}
+.summary .grid-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  row-gap: 10px;
+  margin-top: 10px;
+}
+
+.holdings {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.performance {
+  grid-column-start: 3;
+  grid-column-end: 5;
+}
+
+.total-invested,
+.current-balance,
+.profit-lost,
+.portfolio-change,
+.holdings,
+.performance {
+  border: rgba(255, 255, 255, 0.5) solid 1px;
+  border-radius: 5px;
+}
+
+.total-invested,
+.current-balance,
+.profit-lost,
+.portfolio-change {
+  padding: 15px 10px;
+}
+
+.total-invested .value,
+.current-balance .value,
+.profit-lost .value,
+.portfolio-change .value {
+  font-weight: 500;
+}
+
+.total-invested .title,
+.current-balance .title,
+.profit-lost .title,
+.portfolio-change .title {
+  font-weight: 400;
+  font-size: 13px;
+  opacity: 70%;
+  margin-top: 3px;
+}

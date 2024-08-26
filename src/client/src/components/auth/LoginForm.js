@@ -1,7 +1,7 @@
 import { STATUS_CODE } from "../../utils/constants";
 
 import { AuthContext } from "../../contexts/AuthContext";
-import "../css/AuthForm.css";
+import "./AuthForm.css";
 
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";

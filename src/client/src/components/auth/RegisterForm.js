@@ -1,4 +1,4 @@
-import "../css/AuthForm.css";
+import "./AuthForm.css";
 import {
   STATUS_CODE,
   REGISTER_STATE,
