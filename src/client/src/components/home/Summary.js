@@ -1,3 +1,4 @@
+import Holdings from "./Holdings";
 import "./Summary.css";
 
 const Summary = () => {
@@ -28,7 +29,9 @@ const Summary = () => {
           <div className="value">+$619.37</div>
           <div className="title">24h Portfolio Change</div>
         </div>
-        <div className="holdings">5</div>
+        <div className="holdings">
+          <Holdings />
+        </div>
         <div className="performance">6</div>
       </div>
     </div>

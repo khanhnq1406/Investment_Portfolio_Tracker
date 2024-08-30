@@ -1,0 +1,12 @@
+.holdings-title {
+  margin: 10px;
+  font-weight: 600;
+}
+
+.holdings-chart {
+  width: content-box;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  margin: 0px 10px;
+}
