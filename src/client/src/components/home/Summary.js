@@ -1,4 +1,5 @@
 import Holdings from "./Holdings";
+import Performance from "./Performance";
 import "./Summary.css";
 
 const Summary = () => {
@@ -32,7 +33,9 @@ const Summary = () => {
         <div className="holdings">
           <Holdings />
         </div>
-        <div className="performance">6</div>
+        <div className="performance">
+          <Performance />
+        </div>
       </div>
     </div>
   );

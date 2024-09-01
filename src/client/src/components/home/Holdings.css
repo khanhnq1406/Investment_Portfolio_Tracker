@@ -9,4 +9,5 @@
   display: flex;
   justify-content: center;
   margin: 0px 10px;
+  max-height: 50vh;
 }

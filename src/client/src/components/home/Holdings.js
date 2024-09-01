@@ -8,13 +8,14 @@ import {
   Legend,
   Colors,
   plugins,
+  scales,
 } from "chart.js";
 
-ChartJS.register(Colors, ArcElement, Tooltip, Legend, plugins);
+ChartJS.register(Colors, ArcElement, Tooltip, Legend, plugins, scales);
 
 const Holdings = () => {
   const data = {
-    labels: ["BTC", "ETH", "BNB", "WLD"],
+    labels: [`BTC 35%`, `ETH 30%`, `BNB 20%`, `WLD 15%`],
     datasets: [
       {
         data: [35, 30, 20, 15],
@@ -23,11 +24,15 @@ const Holdings = () => {
     ],
   };
   const options = {
+    responsive: true,
     plugins: {
       legend: {
         display: true,
         position: "right",
-        usePointStyle: true,
+        labels: {
+          usePointStyle: true,
+          boxHeight: 10,
+        },
       },
     },
     layout: {
