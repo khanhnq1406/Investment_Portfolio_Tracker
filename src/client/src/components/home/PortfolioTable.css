@@ -1,0 +1,67 @@
+.portfolio-table {
+  color: #f5f7fd;
+  background-color: transparent;
+  max-width: 1000px;
+  margin: 20px 10vw;
+  width: 100%;
+}
+
+.portfolio-table table {
+  width: 100%;
+}
+
+.portfolio-table table tr td {
+  text-align: center;
+}
+.portfolio-table table tr td.actions button {
+  background-color: transparent;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5px 5px;
+  align-content: center;
+  border: 0;
+}
+
+.portfolio-table table tr td.actions button:hover {
+  background-color: #1b232d;
+  border-radius: 3px;
+}
+.portfolio-table table tr td.actions div {
+  display: flex;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+}
+.portfolio-table table tr td.actions button img {
+  width: 15px;
+}
+
+.holdings-unit {
+  font-weight: 200;
+  opacity: 60%;
+}
+
+.row-setting {
+  font-weight: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.number-row {
+  display: flex;
+  align-items: center;
+}
+
+.number-row p {
+  margin-right: 10px;
+}
+
+.number-row select {
+  height: fit-content;
+  padding: 5px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  border-radius: 5px;
+}

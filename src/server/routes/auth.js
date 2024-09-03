@@ -13,5 +13,4 @@ router.post("/resendRecoveryOtp", authController.resendRecoveryOtp);
 router.post("/verifyRecoveryOtp", authController.verifyRecoveryOtp);
 router.post("/createNewPassword", authController.createNewPassword);
 
-
 module.exports = router;

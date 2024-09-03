@@ -1,5 +1,6 @@
 .portfolio-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   width: 100%;
 }
@@ -45,17 +46,61 @@
 .summary .title .content {
   display: flex;
   align-items: center;
+  font-weight: 600;
 }
 .summary .grid-container {
   display: grid;
   width: 100%;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto auto;
   column-gap: 10px;
   row-gap: 10px;
   margin-top: 10px;
 }
+@media only screen and (max-width: 850px) {
+  .summary .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas:
+      "one1 two2"
+      "three3 four4"
+      "five5 none"
+      "six6 none";
+  }
 
+  .total-invested {
+    grid-area: one1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .current-balance {
+    grid-area: two2;
+    grid-column-start: 3;
+    grid-column-end: 5;
+  }
+  .profit-lost {
+    grid-area: three3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .portfolio-change {
+    grid-area: four4;
+    grid-column-start: 3;
+    grid-column-end: 5;
+  }
+  .holdings {
+    grid-area: five5;
+    grid-column-start: 1 !important;
+    grid-column-end: 5 !important;
+  }
+
+  .performance {
+    grid-area: six6;
+    grid-column-start: 1 !important;
+    grid-column-end: 5 !important;
+  }
+}
 .holdings {
   grid-column-start: 1;
   grid-column-end: 3;

@@ -250,19 +250,17 @@ class AuthController {
   async verifyRecoveryOtp(req, res) {
     const { otp, email } = req.body;
     const redisKey = `${FORGOT_PASSWORD_KEY}:${email}`;
-    console.log(otp, email, redisKey)
+    console.log(otp, email, redisKey);
     const client = await connectRedis();
     const otpRedis = JSON.parse(await client.get(redisKey));
-    console.log(`otpRedis: ${otpRedis} - otp: ${otp}`)
+    console.log(`otpRedis: ${otpRedis} - otp: ${otp}`);
     if (otpRedis === null) {
       return res
         .status(STATUS_CODE.NOT_FOUND)
         .json({ message: "Recovery session has expired" });
     }
     if (String(otp) === String(otpRedis)) {
-      return res
-        .status(STATUS_CODE.OK)
-        .json({ message: "Valid OTP" });
+      return res.status(STATUS_CODE.OK).json({ message: "Valid OTP" });
     } else {
       return res
         .status(STATUS_CODE.BAD_REQUEST)
@@ -270,7 +268,7 @@ class AuthController {
     }
   }
 
-  async createNewPassword(req,res) {
+  async createNewPassword(req, res) {
     const { email, password } = req.body;
     const redisKey = `${FORGOT_PASSWORD_KEY}:${email}`;
     const client = await connectRedis();
@@ -279,21 +277,23 @@ class AuthController {
       return res
         .status(STATUS_CODE.NOT_FOUND)
         .json({ message: "Recovery session has expired" });
-    }
-    else {
+    } else {
       const hashedPassword = await argon2.hash(password);
-      const updatedUser = await User.findOneAndUpdate({email:email}, {password: hashedPassword}, {
-        new: true
-      });
+      const updatedUser = await User.findOneAndUpdate(
+        { email: email },
+        { password: hashedPassword },
+        {
+          new: true,
+        }
+      );
       if (!updatedUser) {
         return res
-        .status(STATUS_CODE.BAD_REQUEST)
-        .json({ message: "Create new password failed" });
-      }
-      else {
+          .status(STATUS_CODE.BAD_REQUEST)
+          .json({ message: "Create new password failed" });
+      } else {
         return res
-        .status(STATUS_CODE.CREATED)
-        .json({ message: "Password successfully updated" });
+          .status(STATUS_CODE.CREATED)
+          .json({ message: "Password successfully updated" });
       }
     }
   }
