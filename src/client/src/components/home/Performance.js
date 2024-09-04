@@ -48,6 +48,32 @@ const Performance = () => {
         },
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          color: "#2e3032", // Color of the x-axis labels
+        },
+        grid: {
+          display: false,
+          //   color: "#ffffff44", // Color of the x-axis grid lines
+        },
+        border: {
+          // width: 2,
+          // color: "#fff", // <-------------- Color of the x-axis
+        },
+      },
+      y: {
+        ticks: {
+          color: "#2e3032", // Color of the x-axis labels
+        },
+        grid: {
+          color: "#2e3032", // Color of the x-axis grid lines
+        },
+        border: {
+          display: false,
+        },
+      },
+    },
   };
 
   const labels = [

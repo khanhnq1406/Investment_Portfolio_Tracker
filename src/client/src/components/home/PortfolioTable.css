@@ -8,8 +8,17 @@
 
 .portfolio-table table {
   width: 100%;
+  border-collapse: collapse;
 }
 
+.portfolio-table table thead th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 0px;
+}
+.portfolio-table table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
 .portfolio-table table tr td {
   text-align: center;
 }
@@ -64,4 +73,71 @@
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 600;
   border-radius: 5px;
+}
+@media only screen and (min-width: 850px) {
+  .navbar-line {
+    display: none;
+  }
+}
+@media only screen and (max-width: 850px) {
+  .portfolio-table table thead tr {
+    display: none;
+  }
+
+  .portfolio-table table td {
+    border: none;
+  }
+  .portfolio-table table {
+    table-layout: fixed;
+  }
+  .portfolio-table table tbody tr {
+    word-wrap: break-word;
+  }
+
+  .portfolio-table table tbody td {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .portfolio-table table tbody td * {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-end;
+    margin: 0;
+  }
+  .portfolio-table table tr td.actions div {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: fit-content;
+  }
+  .portfolio-table table td:before {
+    font-weight: 600;
+  }
+  .portfolio-table table td:nth-of-type(1):before {
+    content: "#";
+  }
+  .portfolio-table table td:nth-of-type(2):before {
+    content: "Coin";
+  }
+  .portfolio-table table td:nth-of-type(3):before {
+    content: "Price";
+  }
+  .portfolio-table table td:nth-of-type(4):before {
+    content: "Holdings";
+  }
+  .portfolio-table table td:nth-of-type(5):before {
+    content: "PNL";
+  }
+  .portfolio-table table td:nth-of-type(6):before {
+    content: "Average Cost";
+  }
+  .portfolio-table table td:nth-of-type(7):before {
+    content: "Total Cost";
+  }
+  .portfolio-table table td:nth-of-type(8):before {
+    content: "Actions";
+  }
 }
