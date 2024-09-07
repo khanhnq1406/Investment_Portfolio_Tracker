@@ -6,13 +6,36 @@ const AddTransaction = () => {
   const [transactionInfo, setTransactionInfo] = useState(
     store.getState().addTransactionDisplayReducer
   );
+  const [cryptoPrice, setCryptoPrice] = useState(null);
   store.subscribe(() => {
     setTransactionInfo(store.getState().addTransactionDisplayReducer);
   });
 
   function handleAddTransaction(event) {
     event.preventDefault();
+    const coinName = event.target["coin"].value;
+    const total = event.target["total"].value;
+    const quantity = event.target["quantity"].value;
+    const price = event.target["price"].value;
+    const datetime = event.target["datetime"].value;
+    const submitButton = event.nativeEvent.submitter.name;
+
+    console.log(coinName, total, quantity, price, datetime, submitButton);
   }
+
+  async function getPriceFromMarket(event) {
+    event.preventDefault();
+    const url = `https://api.binance.com/api/v1/ticker/price?symbol=${transactionInfo.cryptoName}USDT`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const price = data.price;
+      setCryptoPrice(price);
+    } catch (error) {
+      alert("Failed to load coin price. Please try again.");
+    }
+  }
+
   return (
     <div
       className="add-transaction-container"
@@ -23,6 +46,7 @@ const AddTransaction = () => {
           className="close-btn"
           onClick={(e) => {
             store.dispatch(unhideAddTransaction());
+            setCryptoPrice("");
           }}
         >
           <img src="icon/cross.png" />
@@ -37,10 +61,16 @@ const AddTransaction = () => {
               type="text"
               name="coin"
               value={transactionInfo.cryptoName}
+              onChange={(event) => {
+                setTransactionInfo((currentTransactionInfo) => ({
+                  ...currentTransactionInfo,
+                  cryptoName: event.target.value,
+                }));
+              }}
             ></input>
           </div>
           <div className="form-group total-spent">
-            <div>Total spent</div>
+            <div>Total spent (USD)</div>
             <input type="text" name="total"></input>
           </div>
           <div className="form-group quantity">
@@ -48,8 +78,13 @@ const AddTransaction = () => {
             <input type="text" name="quantity"></input>
           </div>
           <div className="form-group price-per-coin">
-            <div>Price per coin</div>
-            <input type="text" name="price"></input>
+            <div>
+              Price per coin (USD){" "}
+              <a href="#" onClick={getPriceFromMarket}>
+                Use Market
+              </a>
+            </div>
+            <input type="text" name="price" value={cryptoPrice}></input>
           </div>
           <div className="form-group date-time">
             <div>Date & Time</div>

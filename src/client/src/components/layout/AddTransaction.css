@@ -103,6 +103,26 @@
 .transaction-form
   .form-group.date-time
   input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-  background-color: yellow;
+  background-color: #f5f7fd;
   border-radius: 2px;
+}
+
+.transaction-form
+  .form-group.date-time
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  background-color: #caccd1;
+}
+
+.transaction-form .form-group.price-per-coin div a {
+  color: #f5f7fd;
+  font-weight: 200;
+}
+
+.transaction-form .form-group.price-per-coin div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.transaction-form .form-group input {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
 }
