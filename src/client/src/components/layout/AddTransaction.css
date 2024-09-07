@@ -1,13 +1,108 @@
 .add-transaction-container {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
+  position: fixed;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #f5f7fd;
+  z-index: 999;
 }
 
-.add-transaction-container h1 {
-  color: aliceblue;
+.transaction-popup {
+  background-color: #1a1e23;
+  width: 50%;
+  height: 80%;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.transaction-popup .close-btn {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  padding: 5px;
+}
+
+.transaction-popup .close-btn:hover {
+  background-color: #2c3745;
+  border-radius: 3px;
+}
+
+.transaction-popup .close-btn img {
+  width: 15px;
+  height: 15px;
+}
+
+.transaction-title {
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.transaction-form .form-group {
+  margin: 7px 0;
+}
+
+.transaction-form .form-group div {
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.transaction-form .form-group input {
+  color: #f5f7fd;
+  font-weight: 200;
+  font-size: 14px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 5px;
+  box-sizing: border-box;
+  background-color: #111317;
+  border: rgba(245, 247, 253, 0.5) solid 1px;
+  border-radius: 5px;
+}
+
+.transaction-form .form-group.submit {
+  display: flex;
+}
+.transaction-form .form-group.submit input.buy {
+  margin-right: 5px;
+  font-weight: 600;
+  background-color: #00a445;
+  border: none;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+.transaction-form .form-group.submit input.buy:hover {
+  background-color: #008148;
+}
+.transaction-form .form-group.submit input.buy:active {
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.8);
+}
+
+.transaction-form .form-group.submit input.sell {
+  margin-left: 5px;
+  font-weight: 600;
+  background-color: #c3151c;
+  border: none;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+}
+.transaction-form .form-group.submit input.sell:hover {
+  background-color: #a11116;
+}
+.transaction-form .form-group.submit input.sell:active {
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.8);
+}
+
+.transaction-form .form-group.date-time input[type="datetime-local"] {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+.transaction-form
+  .form-group.date-time
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background-color: yellow;
+  border-radius: 2px;
 }

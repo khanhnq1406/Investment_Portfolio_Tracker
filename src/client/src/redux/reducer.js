@@ -18,7 +18,7 @@ export const addTransactionDisplayReducer = (
 ) => {
   switch (action.type) {
     case REDUX_TYPE.HIDE_TRANSACTION: {
-      return { display: "block", cryptoName: action.payload.cryptoName };
+      return { display: "flex", cryptoName: action.payload.cryptoName };
     }
     case REDUX_TYPE.UNHIDE_TRANSACTION: {
       return { display: "none", cryptoName: null };
