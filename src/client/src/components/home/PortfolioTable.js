@@ -1,4 +1,6 @@
 import "./PortfolioTable.css";
+import { store } from "../../redux/store";
+import { hideAddTransaction } from "../../redux/actions";
 const PortfolioTable = () => {
   return (
     <div className="portfolio-table">
@@ -34,7 +36,11 @@ const PortfolioTable = () => {
             <td className="total">$11,539.63</td>
             <td className="actions">
               <div>
-                <button>
+                <button
+                  onClick={(e) => {
+                    store.dispatch(hideAddTransaction({ cryptoName: "BTC" }));
+                  }}
+                >
                   <img src="icon/plus(white).png" />
                 </button>
                 <button>

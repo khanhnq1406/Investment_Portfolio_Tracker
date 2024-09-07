@@ -75,7 +75,7 @@
   border-radius: 5px;
 }
 @media only screen and (min-width: 850px) {
-  .navbar-line {
+  .portfolio-table .navbar-line {
     display: none;
   }
 }

@@ -5,7 +5,7 @@ import "./Navbar.css";
 
 const Navbar = () => {
   const { logoutUser } = useContext(AuthContext);
-  const nameOfUser = store.getState().user;
+  const nameOfUser = store.getState().addUserReducer.user;
   const [navigateDisplay, setNavigateDisplay] = useState("none");
 
   return (

@@ -131,3 +131,5 @@ dist
 
 # Identifier WSL
 *Zone.Identifier
+
+.vscode
