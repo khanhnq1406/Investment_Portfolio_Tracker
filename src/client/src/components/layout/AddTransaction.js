@@ -1,4 +1,6 @@
 import "./AddTransaction.css";
+import { BACKEND_URL } from "../../utils/constants";
+import axios from "axios";
 import { useState } from "react";
 import { store } from "../../redux/store";
 import { unhideAddTransaction } from "../../redux/actions";
@@ -11,7 +13,7 @@ const AddTransaction = () => {
     setTransactionInfo(store.getState().addTransactionDisplayReducer);
   });
 
-  function handleAddTransaction(event) {
+  async function handleAddTransaction(event) {
     event.preventDefault();
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
@@ -19,7 +21,24 @@ const AddTransaction = () => {
     const price = event.target["price"].value;
     const datetime = event.target["datetime"].value;
     const submitButton = event.nativeEvent.submitter.name;
-
+    try {
+      const email = store.getState().addUserReducer.email;
+      const response = await axios.post(
+        `${BACKEND_URL}/transaction/addTransaction`,
+        {
+          email: email,
+          coinName: coinName,
+          total: total,
+          quantity: quantity,
+          price: price,
+          datetime: datetime,
+          type: submitButton, // 'buy' or 'sell'
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
     console.log(coinName, total, quantity, price, datetime, submitButton);
   }
 

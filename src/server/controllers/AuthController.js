@@ -19,7 +19,9 @@ class AuthController {
       const email = req.email;
       const user = await User.findOne({ email });
       if (user) {
-        return res.status(STATUS_CODE.OK).json({ name: user.fullname });
+        return res
+          .status(STATUS_CODE.OK)
+          .json({ name: user.fullname, email: email });
       } else {
         return res
           .status(STATUS_CODE.NOT_FOUND)

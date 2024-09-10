@@ -17,7 +17,6 @@ app.use(
     extended: true,
   })
 );
-app.use(express.json());
 
 // Define routes and middleware
 route(app);

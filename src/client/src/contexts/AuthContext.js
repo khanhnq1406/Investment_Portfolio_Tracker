@@ -32,7 +32,9 @@ const AuthContextProvider = ({ children }) => {
             user: response.data.name,
           },
         });
-        store.dispatch(addUser(response.data.name));
+        store.dispatch(
+          addUser({ name: response.data.name, email: response.data.email })
+        );
       }
     } catch (error) {
       localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);

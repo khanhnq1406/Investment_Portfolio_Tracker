@@ -1,10 +1,11 @@
 import { REDUX_TYPE } from "./types";
 
-export const addUserReducer = (state = { user: null }, action) => {
+export const addUserReducer = (state = { user: null, email: null }, action) => {
   switch (action.type) {
     case REDUX_TYPE.ADD_USER: {
       return {
-        user: action.payload,
+        user: action.payload.name,
+        email: action.payload.email,
       };
     }
     default:

@@ -8,22 +8,28 @@ const STATUS_CODE = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+exports.STATUS_CODE = STATUS_CODE;
+
 const OTP_EXPIRE = 60;
+exports.OTP_EXPIRE = OTP_EXPIRE;
 
 const FORGOT_PASSWORD_KEY = "forgotPassword";
+exports.FORGOT_PASSWORD_KEY = FORGOT_PASSWORD_KEY;
 
 const os = require("os");
-console.log(os.type());
 const DOCKER_HOST =
   os.type() === "Linux" ? "172.18.0.1" : "host.docker.internal";
+exports.DOCKER_HOST = DOCKER_HOST;
 
 const MONGODB_USERNAME = process.env.MONGODB_USERNAME;
 const MONGODB_PASSWORD = process.env.MONGODB_PASSWORD;
 const MONGODB_ADDRESS = process.env.MONGODB_ADDRESS;
 const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_ADDRESS}`;
-
 exports.MONGODB_URI = MONGODB_URI;
-exports.STATUS_CODE = STATUS_CODE;
-exports.OTP_EXPIRE = OTP_EXPIRE;
-exports.FORGOT_PASSWORD_KEY = FORGOT_PASSWORD_KEY;
-exports.DOCKER_HOST = DOCKER_HOST;
+
+const COLLECTION = {
+  USER: "users",
+  HOLDING: "CoinHolding",
+  TRANSACTION: "Transaction",
+};
+exports.COLLECTION = COLLECTION;
