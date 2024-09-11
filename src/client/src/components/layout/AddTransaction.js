@@ -110,12 +110,12 @@ const AddTransaction = () => {
             <input type="datetime-local" name="datetime"></input>
           </div>
           <div className="form-group submit">
-            <input type="submit" value="Buy" className="buy" name="buy"></input>
+            <input type="submit" value="Buy" className="buy" name="Buy"></input>
             <input
               type="submit"
               value="Sell"
               className="sell"
-              name="sell"
+              name="Sell"
             ></input>
           </div>
         </form>
