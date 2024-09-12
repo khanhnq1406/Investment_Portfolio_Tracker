@@ -1,5 +1,9 @@
 import "./AddTransaction.css";
-import { ADD_TRANSACTION_STATE, BACKEND_URL } from "../../utils/constants";
+import {
+  ADD_TRANSACTION_STATE,
+  BACKEND_URL,
+  STATUS_CODE,
+} from "../../utils/constants";
 import axios from "axios";
 import { useState } from "react";
 import { store } from "../../redux/store";
@@ -26,18 +30,28 @@ const AddTransaction = () => {
     const type = event.nativeEvent.submitter.name;
     try {
       const email = store.getState().addUserReducer.email;
-      await axios.post(`${BACKEND_URL}/transaction/addTransaction`, {
-        email: email,
-        coinName: coinName,
-        total: total,
-        quantity: quantity,
-        price: price,
-        datetime: datetime,
-        type: type, // 'buy' or 'sell'
-      });
-      setAddTransactionState(ADD_TRANSACTION_STATE.Success);
+      const response = await axios.post(
+        `${BACKEND_URL}/transaction/addTransaction`,
+        {
+          email: email,
+          coinName: coinName,
+          total: total,
+          quantity: quantity,
+          price: price,
+          datetime: datetime,
+          type: type, // 'buy' or 'sell'
+        }
+      );
+      console.log(response);
+      if (response.status === STATUS_CODE.CREATED) {
+        setAddTransactionState(ADD_TRANSACTION_STATE.Success);
+      }
     } catch (error) {
-      alert("Failed to add transaction. Please try again.");
+      if (error.response.status === STATUS_CODE.BAD_REQUEST) {
+        alert(error.response.data.message);
+      } else {
+        alert("Failed to add transaction. Please try again.");
+      }
     }
   }
 

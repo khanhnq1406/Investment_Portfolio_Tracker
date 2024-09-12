@@ -15,6 +15,11 @@ class TransactionController {
       const id = hexEncode(`${coinName}:${email}`).trim();
       const coinHolding = await holdingCollection.findOne({ _id: id });
       if (coinHolding === null) {
+        if (type === "Sell") {
+          return res
+            .status(STATUS_CODE.BAD_REQUEST)
+            .json({ message: "Cannot sell coins that you don't own" });
+        }
         await holdingCollection.insertOne({
           _id: id,
           holdingQuantity: Number(quantity),
@@ -22,12 +27,13 @@ class TransactionController {
           avgPrice: Number(price),
         });
 
-        const user = await userCollection.findOne({ email: email });
         const filter = { email: email };
         const updateDoc = {
-          $set: {
-            totalInvested: Number(user.totalInvested) + Number(total),
-            CoinHolding: [...user.CoinHolding, id],
+          $inc: {
+            totalInvested: Number(total),
+          },
+          $push: {
+            CoinHolding: id,
           },
         };
         await userCollection.updateOne(filter, updateDoc);
@@ -68,11 +74,10 @@ class TransactionController {
         };
         await holdingCollection.updateOne(filter, updateDoc);
 
-        const user = await userCollection.findOne({ email: email });
         filter = { email: email };
         updateDoc = {
-          $set: {
-            totalInvested: Number(user.totalInvested) + Number(total),
+          $inc: {
+            totalInvested: type === "Buy " ? Number(total) : -Number(total),
           },
         };
         await userCollection.updateOne(filter, updateDoc);
@@ -111,7 +116,9 @@ class TransactionController {
           });
         }
       }
-      return res.status(200).json({ message: "Transaction successful" });
+      return res
+        .status(STATUS_CODE.CREATED)
+        .json({ message: "Transaction successful" });
     } catch (error) {
       res
         .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
