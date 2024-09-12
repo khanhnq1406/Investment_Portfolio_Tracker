@@ -33,3 +33,6 @@ const COLLECTION = {
   TRANSACTION: "Transaction",
 };
 exports.COLLECTION = COLLECTION;
+
+const CRYPTO_PRICE_URL = "https://api.binance.com/api/v1/ticker/price?symbol=";
+exports.CRYPTO_PRICE_URL = CRYPTO_PRICE_URL;

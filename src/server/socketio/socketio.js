@@ -1,4 +1,12 @@
 const { Server } = require("socket.io");
+const axios = require("axios");
+const {
+  userCollection,
+  holdingCollection,
+  transactionCollection,
+} = require("../utils/mongoClient");
+const { CRYPTO_PRICE_URL } = require("../utils/constants");
+
 function socketio(server) {
   const io = new Server(server, {
     cors: {
@@ -9,8 +17,30 @@ function socketio(server) {
   io.on("connection", (socket) => {
     console.log(`User ${socket.id} connected`);
 
-    socket.on("getPrice", (data) => {
+    socket.on("getPrice", async (data) => {
       console.log(data);
+      const email = data.email;
+      const user = await userCollection.findOne({ email: email });
+      let totalBalance = 0;
+      for (let i = 0; i < user.CoinHolding.length; i++) {
+        const holding = await holdingCollection
+          .find({
+            _id: user.CoinHolding[i],
+          })
+          .toArray();
+        const currency = holding[0].name;
+        const response = await axios.get(`${CRYPTO_PRICE_URL}${currency}USDT`);
+        const price = response.data.price;
+        const holdingQuantity = holding[0].holdingQuantity;
+        const currentBalance = price * holdingQuantity;
+        totalBalance += currentBalance;
+      }
+      const responseData = {
+        totalInvested: user.totalInvested,
+        currentBalance: totalBalance,
+      };
+      socket.emit("getPriceResponse", responseData);
+      console.log(responseData);
     });
 
     socket.on("disconnect", () => {
