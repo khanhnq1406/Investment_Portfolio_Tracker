@@ -42,7 +42,6 @@ const AddTransaction = () => {
           type: type, // 'buy' or 'sell'
         }
       );
-      console.log(response);
       if (response.status === STATUS_CODE.CREATED) {
         setAddTransactionState(ADD_TRANSACTION_STATE.Success);
       }

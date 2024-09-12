@@ -1,8 +1,34 @@
+import { io } from "socket.io-client";
+import { useEffect } from "react";
+import axios from "axios";
 import Holdings from "./Holdings";
 import Performance from "./Performance";
 import "./Summary.css";
+import { BACKEND_URL } from "../../utils/constants";
+import { store } from "../../redux/store";
+
+const socket = io.connect(BACKEND_URL);
 
 const Summary = () => {
+  useEffect(() => {
+    const email = store.getState().addUserReducer.email;
+
+    (async () => {
+      const response = await axios.get(`${BACKEND_URL}/fetch/summary`, {
+        params: { email: email },
+      });
+      console.log(response);
+      return response;
+    })().catch(console.error);
+
+    const interval = setInterval(() => {
+      socket.emit("getPrice", {
+        email: email,
+      });
+    }, 50000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="summary">
       <div className="title">

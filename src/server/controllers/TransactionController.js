@@ -1,10 +1,9 @@
 const {
-  collectionTransaction,
   userCollection,
   holdingCollection,
   transactionCollection,
 } = require("../utils/mongoClient");
-const { COLLECTION, STATUS_CODE } = require("../utils/constants");
+const { STATUS_CODE } = require("../utils/constants");
 const { hexEncode } = require("../utils/hexConvertor");
 class TransactionController {
   // [GET] /controller/addTransaction
@@ -22,6 +21,7 @@ class TransactionController {
         }
         await holdingCollection.insertOne({
           _id: id,
+          name: coinName,
           holdingQuantity: Number(quantity),
           totalCost: Number(total),
           avgPrice: Number(price),
