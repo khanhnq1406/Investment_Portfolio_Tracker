@@ -43,7 +43,7 @@ const AuthContextProvider = ({ children }) => {
         type: "SET_AUTH",
         payload: { isAuthenticated: false, user: null },
       });
-      store.dispatch(addUser(null));
+      store.dispatch(addUser({ name: null, email: null }));
     }
   };
 
@@ -88,7 +88,7 @@ const AuthContextProvider = ({ children }) => {
       type: "SET_AUTH",
       payload: { isAuthenticated: false, user: null },
     });
-    store.dispatch(addUser(null));
+    store.dispatch(addUser({ name: null, email: null }));
   };
 
   // Context data

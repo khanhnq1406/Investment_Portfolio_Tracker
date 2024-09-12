@@ -1,5 +1,5 @@
 import "./AddTransaction.css";
-import { BACKEND_URL } from "../../utils/constants";
+import { ADD_TRANSACTION_STATE, BACKEND_URL } from "../../utils/constants";
 import axios from "axios";
 import { useState } from "react";
 import { store } from "../../redux/store";
@@ -8,10 +8,13 @@ const AddTransaction = () => {
   const [transactionInfo, setTransactionInfo] = useState(
     store.getState().addTransactionDisplayReducer
   );
-  const [cryptoPrice, setCryptoPrice] = useState(null);
+  const [cryptoPrice, setCryptoPrice] = useState("");
   store.subscribe(() => {
     setTransactionInfo(store.getState().addTransactionDisplayReducer);
   });
+  const [addTransactionState, setAddTransactionState] = useState(
+    ADD_TRANSACTION_STATE.Input
+  );
 
   async function handleAddTransaction(event) {
     event.preventDefault();
@@ -20,26 +23,22 @@ const AddTransaction = () => {
     const quantity = event.target["quantity"].value;
     const price = event.target["price"].value;
     const datetime = event.target["datetime"].value;
-    const submitButton = event.nativeEvent.submitter.name;
+    const type = event.nativeEvent.submitter.name;
     try {
       const email = store.getState().addUserReducer.email;
-      const response = await axios.post(
-        `${BACKEND_URL}/transaction/addTransaction`,
-        {
-          email: email,
-          coinName: coinName,
-          total: total,
-          quantity: quantity,
-          price: price,
-          datetime: datetime,
-          type: submitButton, // 'buy' or 'sell'
-        }
-      );
-      console.log(response);
+      await axios.post(`${BACKEND_URL}/transaction/addTransaction`, {
+        email: email,
+        coinName: coinName,
+        total: total,
+        quantity: quantity,
+        price: price,
+        datetime: datetime,
+        type: type, // 'buy' or 'sell'
+      });
+      setAddTransactionState(ADD_TRANSACTION_STATE.Success);
     } catch (error) {
-      console.log(error);
+      alert("Failed to add transaction. Please try again.");
     }
-    console.log(coinName, total, quantity, price, datetime, submitButton);
   }
 
   async function getPriceFromMarket(event) {
@@ -55,71 +54,104 @@ const AddTransaction = () => {
     }
   }
 
+  function handleChangeCryptoPrice(event) {
+    setCryptoPrice(event.target.value);
+  }
   return (
     <div
       className="add-transaction-container"
       style={{ display: `${transactionInfo.display}` }}
     >
-      <div className="transaction-popup">
-        <button
-          className="close-btn"
-          onClick={(e) => {
-            store.dispatch(unhideAddTransaction());
-            setCryptoPrice("");
-          }}
-        >
-          <img src="icon/cross.png" />
-        </button>
+      {addTransactionState === ADD_TRANSACTION_STATE.Input ? (
+        <div className="transaction-popup">
+          <button
+            className="close-btn"
+            onClick={(e) => {
+              store.dispatch(unhideAddTransaction());
+              setCryptoPrice("");
+            }}
+          >
+            <img src="icon/cross.png" />
+          </button>
 
-        <div className="transaction-title">Add Transaction</div>
+          <div className="transaction-title">Add Transaction</div>
 
-        <form className="transaction-form" onSubmit={handleAddTransaction}>
-          <div className="form-group coin">
-            <div>Select coin</div>
-            <input
-              type="text"
-              name="coin"
-              value={transactionInfo.cryptoName}
-              onChange={(event) => {
-                setTransactionInfo((currentTransactionInfo) => ({
-                  ...currentTransactionInfo,
-                  cryptoName: event.target.value,
-                }));
-              }}
-            ></input>
-          </div>
-          <div className="form-group total-spent">
-            <div>Total spent (USD)</div>
-            <input type="text" name="total"></input>
-          </div>
-          <div className="form-group quantity">
-            <div>Quantity</div>
-            <input type="text" name="quantity"></input>
-          </div>
-          <div className="form-group price-per-coin">
-            <div>
-              Price per coin (USD){" "}
-              <a href="#" onClick={getPriceFromMarket}>
-                Use Market
-              </a>
+          <form className="transaction-form" onSubmit={handleAddTransaction}>
+            <div className="form-group coin">
+              <div>Select coin</div>
+              <input
+                type="text"
+                name="coin"
+                value={transactionInfo.cryptoName}
+                onChange={(event) => {
+                  setTransactionInfo((currentTransactionInfo) => ({
+                    ...currentTransactionInfo,
+                    cryptoName: event.target.value,
+                  }));
+                }}
+              ></input>
             </div>
-            <input type="text" name="price" value={cryptoPrice}></input>
+            <div className="form-group total-spent">
+              <div>Total spent (USD)</div>
+              <input type="text" name="total"></input>
+            </div>
+            <div className="form-group quantity">
+              <div>Quantity</div>
+              <input type="text" name="quantity"></input>
+            </div>
+            <div className="form-group price-per-coin">
+              <div>
+                Price per coin (USD){" "}
+                <a href="#" onClick={getPriceFromMarket}>
+                  Use Market
+                </a>
+              </div>
+              <input
+                type="text"
+                name="price"
+                value={cryptoPrice}
+                onChange={handleChangeCryptoPrice}
+              ></input>
+            </div>
+            <div className="form-group date-time">
+              <div>Date & Time</div>
+              <input type="datetime-local" name="datetime"></input>
+            </div>
+            <div className="form-group submit">
+              <input
+                type="submit"
+                value="Buy"
+                className="buy"
+                name="Buy"
+              ></input>
+              <input
+                type="submit"
+                value="Sell"
+                className="sell"
+                name="Sell"
+              ></input>
+            </div>
+          </form>
+        </div>
+      ) : (
+        <div className="transaction-popup">
+          <div className="form success">
+            <div className="title">Success!</div>
+            <div>
+              Congratulations, the transaction has been successfully added.{" "}
+            </div>
+            <button
+              onClick={(e) => {
+                store.dispatch(unhideAddTransaction());
+                setCryptoPrice("");
+                setAddTransactionState(ADD_TRANSACTION_STATE.Input);
+              }}
+            >
+              Done
+            </button>
           </div>
-          <div className="form-group date-time">
-            <div>Date & Time</div>
-            <input type="datetime-local" name="datetime"></input>
-          </div>
-          <div className="form-group submit">
-            <input type="submit" value="Buy" className="buy" name="Buy"></input>
-            <input
-              type="submit"
-              value="Sell"
-              className="sell"
-              name="Sell"
-            ></input>
-          </div>
-        </form>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

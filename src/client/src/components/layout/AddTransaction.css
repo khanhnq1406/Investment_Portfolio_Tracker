@@ -15,7 +15,7 @@
 .transaction-popup {
   background-color: #1a1e23;
   width: 50%;
-  height: 80%;
+  height: fit-content;
   border-radius: 10px;
   padding: 20px;
 }
@@ -40,7 +40,7 @@
 
 .transaction-title {
   font-weight: 700;
-  margin-top: 10px;
+  margin-top: 7px;
 }
 
 .transaction-form .form-group {
@@ -125,4 +125,9 @@
 
 .transaction-form .form-group input {
   font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+.transaction-popup .form.success {
+  width: 100%;
+  padding: 0;
 }

@@ -11,6 +11,11 @@ export const RECOVERY_PASS_STATE = Object.freeze({
   Success: 4,
 });
 
+export const ADD_TRANSACTION_STATE = Object.freeze({
+  Input: 1,
+  Success: 2,
+});
+
 export const STATUS_CODE = {
   OK: 200,
   CREATED: 201,
