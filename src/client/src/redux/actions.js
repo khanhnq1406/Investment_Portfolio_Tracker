@@ -18,3 +18,10 @@ export const unhideAddTransaction = () => {
     type: REDUX_TYPE.UNHIDE_TRANSACTION,
   };
 };
+
+export const addSummaryData = (payload) => {
+  return {
+    type: REDUX_TYPE.ADD_SUMMARY_DATA,
+    payload: payload,
+  };
+};

@@ -28,3 +28,13 @@ export const addTransactionDisplayReducer = (
       return state;
   }
 };
+
+export const addSummaryDataReducer = (state = { data: null }, action) => {
+  switch (action.type) {
+    case REDUX_TYPE.ADD_SUMMARY_DATA: {
+      return { data: action.payload };
+    }
+    default:
+      return state;
+  }
+};

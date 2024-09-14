@@ -6,6 +6,7 @@ import Performance from "./Performance";
 import "./Summary.css";
 import { BACKEND_URL } from "../../utils/constants";
 import { store } from "../../redux/store";
+import { addSummaryData } from "../../redux/actions";
 
 const socket = io.connect(BACKEND_URL);
 
@@ -25,13 +26,19 @@ const Summary = () => {
         ...response.data,
         totalProfit: Math.floor(totalProfit * 100) / 100,
       });
+      store.dispatch(
+        addSummaryData({
+          ...response.data,
+          totalProfit: Math.floor(totalProfit * 100) / 100,
+        })
+      );
     })().catch(console.error);
 
     const interval = setInterval(() => {
       socket.emit("getPrice", {
         email: email,
       });
-    }, 5000);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -43,6 +50,12 @@ const Summary = () => {
         ...data,
         totalProfit: Math.floor(totalProfit * 100) / 100,
       });
+      store.dispatch(
+        addSummaryData({
+          ...data,
+          totalProfit: Math.floor(totalProfit * 100) / 100,
+        })
+      );
     });
   }, [socket]);
   return (
