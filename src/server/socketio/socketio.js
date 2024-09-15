@@ -17,12 +17,13 @@ function socketio(server) {
   io.on("connection", (socket) => {
     console.log(`User ${socket.id} connected`);
 
-    socket.on("getPrice", async (data) => {
+    socket.on("fetchData", async (data) => {
       console.log(data);
       const email = data.email;
       const user = await userCollection.findOne({ email: email });
       let totalBalance = 0;
       let holdingList = [];
+      let holdingTable = [];
       for (let i = 0; i < user.CoinHolding.length; i++) {
         const holding = await holdingCollection
           .find({
@@ -34,6 +35,7 @@ function socketio(server) {
         holdingList.push({ [`${currency}`]: totalCost });
         const response = await axios.get(`${CRYPTO_PRICE_URL}${currency}USDT`);
         const price = response.data.price;
+        holdingTable.push({ ...holding[0], price: price });
         const holdingQuantity = holding[0].holdingQuantity;
         const currentBalance = price * holdingQuantity;
         totalBalance += currentBalance;
@@ -42,9 +44,17 @@ function socketio(server) {
         totalInvested: user.totalInvested,
         currentBalance: totalBalance,
         holdingList: holdingList,
+        holdingTable: holdingTable,
       };
-      socket.emit("getPriceResponse", responseData);
+      console.log(socket.id);
+      io.to(socket.id).emit("fetchDataResponse", responseData);
       console.log(responseData);
+    });
+
+    socket.on("getPrice", async (data) => {
+      console.log(data);
+      const responseData = data;
+      io.to(socket.id).emit("getPriceResponse", responseData);
     });
 
     socket.on("disconnect", () => {

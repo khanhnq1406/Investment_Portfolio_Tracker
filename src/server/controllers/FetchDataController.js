@@ -13,6 +13,7 @@ class FetchDataController {
     const user = await userCollection.findOne({ email: email });
     let totalBalance = 0;
     let holdingList = [];
+    let holdingTable = [];
     for (let i = 0; i < user.CoinHolding.length; i++) {
       const holding = await holdingCollection
         .find({
@@ -24,6 +25,7 @@ class FetchDataController {
       holdingList.push({ [`${currency}`]: totalCost });
       const response = await axios.get(`${CRYPTO_PRICE_URL}${currency}USDT`);
       const price = response.data.price;
+      holdingTable.push({ ...holding[0], price: price });
       const holdingQuantity = holding[0].holdingQuantity;
       const currentBalance = price * holdingQuantity;
       totalBalance += currentBalance;
@@ -32,6 +34,7 @@ class FetchDataController {
       totalInvested: user.totalInvested,
       currentBalance: totalBalance,
       holdingList: holdingList,
+      holdingTable: holdingTable,
     });
   }
 }

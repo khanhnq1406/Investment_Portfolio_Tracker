@@ -8,7 +8,7 @@ import { BACKEND_URL } from "../../utils/constants";
 import { store } from "../../redux/store";
 import { addSummaryData } from "../../redux/actions";
 
-const socket = io.connect(BACKEND_URL);
+export const socket = io.connect(BACKEND_URL);
 
 const Summary = () => {
   const [data, setData] = useState({});
@@ -35,7 +35,7 @@ const Summary = () => {
     })().catch(console.error);
 
     const interval = setInterval(() => {
-      socket.emit("getPrice", {
+      socket.emit("fetchData", {
         email: email,
       });
     }, 10000);
@@ -43,7 +43,7 @@ const Summary = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("getPriceResponse", (data) => {
+    socket.on("fetchDataResponse", (data) => {
       const totalProfit =
         Number(data.currentBalance) - Number(data.totalInvested);
       setData({
@@ -88,7 +88,7 @@ const Summary = () => {
             </div>
           ) : Number(data.totalProfit) < 0 ? (
             <div className="value" style={{ color: "#C3151C" }}>
-              -${data.totalProfit}
+              ${data.totalProfit}
             </div>
           ) : (
             <div className="value">{data.totalProfit}</div>
