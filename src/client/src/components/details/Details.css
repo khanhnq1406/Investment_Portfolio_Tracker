@@ -29,3 +29,48 @@
   font-size: 20px;
   font-weight: 600;
 }
+
+.details-grid-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 10px;
+  row-gap: 10px;
+  margin-top: 10px;
+}
+
+.details-grid-container .holding-value,
+.details-grid-container .holding-quantity,
+.details-grid-container .total-cost,
+.details-grid-container .average-cost,
+.details-grid-container .total-profit {
+  border: rgba(255, 255, 255, 0.5) solid 1px;
+  border-radius: 5px;
+  padding: 15px 10px;
+}
+
+.details-grid-container .holding-value .value,
+.details-grid-container .holding-quantity .value,
+.details-grid-container .total-cost .value,
+.details-grid-container .average-cost .value,
+.details-grid-container .total-profit .value {
+  font-weight: 500;
+}
+
+.details-grid-container .holding-value .title,
+.details-grid-container .holding-quantity .title,
+.details-grid-container .total-cost .title,
+.details-grid-container .average-cost .title,
+.details-grid-container .total-profit .title {
+  font-weight: 400;
+  font-size: 13px;
+  opacity: 70%;
+  margin-top: 3px;
+}
+
+@media only screen and (max-width: 850px) {
+  .details-grid-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

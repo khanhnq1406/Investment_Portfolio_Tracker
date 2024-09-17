@@ -5,6 +5,7 @@ const {
   transactionCollection,
 } = require("../utils/mongoClient");
 const { STATUS_CODE, CRYPTO_PRICE_URL } = require("../utils/constants");
+const { hexEncode } = require("../utils/hexConvertor");
 
 class FetchDataController {
   // [GET] /fetchData/summary
@@ -36,6 +37,28 @@ class FetchDataController {
       holdingList: holdingList,
       holdingTable: holdingTable,
     });
+  }
+
+  // [GET] /fetch/details
+  async details(req, res) {
+    const email = req.query.email;
+    const symbol = req.query.symbol;
+    const id = hexEncode(`${symbol}:${email}`).trim();
+    const holding = await holdingCollection.findOne({
+      _id: id,
+    });
+    const request = await axios.get(`${CRYPTO_PRICE_URL}${symbol}USDT`);
+    const price = request.data.price;
+    const holdingValue = parseFloat(
+      (Number(price) * Number(holding.holdingQuantity)).toFixed(2)
+    );
+    const response = {
+      holdingValue: holdingValue,
+      holdingQuantity: parseFloat(Number(holding.holdingQuantity).toFixed(8)),
+      totalCost: holding.totalCost,
+      avgCost: holding.avgPrice,
+    };
+    res.status(STATUS_CODE.OK).json(response);
   }
 }
 module.exports = new FetchDataController();
