@@ -4,6 +4,7 @@ import Auth from "./views/Auth";
 import Home from "./views/Home";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import "./App.css";
+import Details from "./views/Details";
 function App() {
   return (
     <AuthContextProvider>
@@ -20,6 +21,14 @@ function App() {
             element={
               <ProtectedRoute redirectTo="/login">
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/details/:id"
+            element={
+              <ProtectedRoute redirectTo="/login">
+                <Details />
               </ProtectedRoute>
             }
           />

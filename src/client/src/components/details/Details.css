@@ -1,0 +1,7 @@
+.details-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1000px;
+  padding: 0 10vw;
+}

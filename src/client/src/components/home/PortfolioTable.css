@@ -74,6 +74,33 @@
   font-weight: 600;
   border-radius: 5px;
 }
+.actions select {
+  background-color: transparent;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-image: url("../../../public/icon/menu.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 25px;
+}
+.actions select:hover {
+  background-color: #1b232d;
+  border-radius: 3px;
+}
+.actions select:active {
+  background-color: #1b232d;
+  border-radius: 3px;
+  border: none;
+}
+.actions option {
+  background-color: #f5f7fd;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
+}
+
 @media only screen and (min-width: 850px) {
   .portfolio-table .navbar-line {
     display: none;
