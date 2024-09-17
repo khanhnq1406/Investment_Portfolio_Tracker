@@ -2,6 +2,30 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+}
+
+.details-summary {
+  color: #f5f7fd;
   max-width: 1000px;
-  padding: 0 10vw;
+  width: 100%;
+  margin: 0 10vw;
+}
+
+.coin-name {
+  display: flex;
+  gap: 5px;
+}
+
+.coin-name .symbol {
+  font-weight: 700;
+}
+
+.coin-name p {
+  margin: 5px 0px;
+}
+
+.detail-price {
+  font-size: 20px;
+  font-weight: 600;
 }

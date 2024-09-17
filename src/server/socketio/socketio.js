@@ -52,9 +52,10 @@ function socketio(server) {
     });
 
     socket.on("getPrice", async (data) => {
-      console.log(data);
-      const responseData = data;
-      io.to(socket.id).emit("getPriceResponse", responseData);
+      const currency = data.currency;
+      const response = await axios.get(`${CRYPTO_PRICE_URL}${currency}USDT`);
+      const price = response.data.price;
+      io.to(socket.id).emit("getPriceResponse", price);
     });
 
     socket.on("disconnect", () => {

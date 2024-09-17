@@ -7,7 +7,6 @@ const Navbar = () => {
   const { logoutUser } = useContext(AuthContext);
   const nameOfUser = store.getState().addUserReducer.user;
   const [navigateDisplay, setNavigateDisplay] = useState("none");
-  console.log(window.location.hostname);
   return (
     <div className="navbar">
       <div className="logo">
