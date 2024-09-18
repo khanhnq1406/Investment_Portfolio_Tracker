@@ -6,7 +6,7 @@ const {
 const { STATUS_CODE } = require("../utils/constants");
 const { hexEncode } = require("../utils/hexConvertor");
 class TransactionController {
-  // [GET] /controller/addTransaction
+  // [GET] /transaction/addTransaction
   async addTransaction(req, res) {
     const { email, coinName, total, quantity, price, datetime, type } =
       req.body;
@@ -124,6 +124,35 @@ class TransactionController {
         .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal Server Error" });
     }
+  }
+
+  // [GET] /transaction/table
+  async table(req, res) {
+    const email = req.query.email;
+    const symbol = req.query.symbol;
+    const fromPage = req.query.fromPage;
+    const toPage = req.query.toPage;
+
+    const id = hexEncode(`${symbol}:${email}`).trim();
+
+    const holding = await transactionCollection
+      .find({
+        coinHoldingId: id,
+        page: { $gt: Number(fromPage), $lte: Number(toPage) },
+      })
+      .toArray();
+    res.json(holding);
+  }
+
+  // [GET] /transaction/numberOfPage
+  async numberOfPage(req, res) {
+    const email = req.query.email;
+    const symbol = req.query.symbol;
+    const id = hexEncode(`${symbol}:${email}`).trim();
+    const numberOfPage = await transactionCollection.count({
+      coinHoldingId: id,
+    });
+    res.json(numberOfPage);
   }
 }
 

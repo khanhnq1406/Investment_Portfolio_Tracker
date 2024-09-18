@@ -9,4 +9,7 @@ router.post(
   transactionController.addTransaction
 );
 
+router.get("/table", verifyToken, transactionController.table);
+router.get("/numberOfPage", verifyToken, transactionController.numberOfPage);
+
 module.exports = router;

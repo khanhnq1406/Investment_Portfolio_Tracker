@@ -47,22 +47,25 @@ class FetchDataController {
     const holding = await holdingCollection.findOne({
       _id: id,
     });
-    const request = await axios.get(`${CRYPTO_PRICE_URL}${symbol}USDT`);
-    const price = request.data.price;
-    const holdingValue = parseFloat(
-      (Number(price) * Number(holding.holdingQuantity)).toFixed(2)
-    );
-    const profit = parseFloat(
-      (Number(holdingValue) - Number(holding.totalCost)).toFixed(2)
-    );
-    const response = {
-      holdingValue: holdingValue,
-      holdingQuantity: parseFloat(Number(holding.holdingQuantity).toFixed(8)),
-      totalCost: holding.totalCost,
-      avgCost: holding.avgPrice,
-      profit: profit,
-    };
-    res.status(STATUS_CODE.OK).json(response);
+    if (holding !== null) {
+      const request = await axios.get(`${CRYPTO_PRICE_URL}${symbol}USDT`);
+      const price = request.data.price;
+      const holdingValue = parseFloat(
+        (Number(price) * Number(holding.holdingQuantity)).toFixed(2)
+      );
+      const profit = parseFloat(
+        (Number(holdingValue) - Number(holding.totalCost)).toFixed(2)
+      );
+      const response = {
+        holdingValue: holdingValue,
+        holdingQuantity: parseFloat(Number(holding.holdingQuantity).toFixed(8)),
+        totalCost: holding.totalCost,
+        avgCost: holding.avgPrice,
+        profit: profit,
+      };
+      return res.status(STATUS_CODE.OK).json(response);
+    }
+    return res.status(STATUS_CODE.OK).json(null);
   }
 }
 module.exports = new FetchDataController();

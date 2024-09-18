@@ -84,7 +84,7 @@ const AddTransaction = () => {
               setCryptoPrice("");
             }}
           >
-            <img src="icon/cross.png" />
+            <img src="/icon/cross.png" />
           </button>
 
           <div className="transaction-title">Add Transaction</div>
