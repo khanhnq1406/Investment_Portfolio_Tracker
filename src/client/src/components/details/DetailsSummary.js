@@ -26,10 +26,7 @@ const DetailsSummary = (props) => {
       })
       .then((response) => {
         const data = response.data;
-        setSummaryData({
-          data,
-        });
-        console.log(data);
+        setSummaryData(data);
       })
       .catch(console.error());
 
@@ -46,10 +43,29 @@ const DetailsSummary = (props) => {
   }, []);
 
   useEffect(() => {
-    socket.on("getPriceResponse", (data) => {
-      setPrice(parseFloat(Number(data)));
+    socket.on("getPriceResponse", (price) => {
+      setPrice(parseFloat(Number(price)));
     });
   }, [socket]);
+
+  useEffect(() => {
+    if (summaryData !== null) {
+      const holdingValue = parseFloat(
+        (Number(price) * Number(summaryData.holdingQuantity)).toFixed(2)
+      );
+      const profit = parseFloat(
+        (Number(holdingValue) - Number(summaryData.totalCost)).toFixed(2)
+      );
+      setSummaryData((prev) => {
+        const current = {
+          ...prev,
+          profit: profit,
+          holdingValue: holdingValue,
+        };
+        return current;
+      });
+    }
+  }, [price]);
   return (
     <div className="details-summary">
       <div className="coin-name">
@@ -72,11 +88,23 @@ const DetailsSummary = (props) => {
             <div className="title">Total Cost</div>
           </div>
           <div className="average-cost">
-            <div className="value">{summaryData.avgCost}</div>
+            <div className="value">${summaryData.avgCost}</div>
             <div className="title">Average Net Cost</div>
           </div>
           <div className="total-profit">
-            <div className="value">Holding Value</div>
+            <div
+              className="value"
+              style={{
+                color:
+                  Number(summaryData.profit) > 0
+                    ? "#00A445"
+                    : Number(summaryData.profit) < 0
+                    ? "#C3151C"
+                    : "#F5F7FD",
+              }}
+            >
+              ${summaryData.profit}
+            </div>
             <div className="title">Total Profit / Loss</div>
           </div>
         </div>
