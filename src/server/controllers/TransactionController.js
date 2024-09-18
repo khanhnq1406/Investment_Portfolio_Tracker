@@ -48,6 +48,7 @@ class TransactionController {
               price: Number(price),
               cost: Number(total),
               datetime: datetime,
+              quantity: quantity,
             },
           ],
         });
@@ -96,6 +97,7 @@ class TransactionController {
                 price: Number(price),
                 cost: Number(total),
                 datetime: datetime,
+                quantity: quantity,
               },
             },
           };
@@ -111,6 +113,7 @@ class TransactionController {
                 price: Number(price),
                 cost: Number(total),
                 datetime: datetime,
+                quantity: quantity,
               },
             ],
           });
@@ -132,7 +135,7 @@ class TransactionController {
     const symbol = req.query.symbol;
     const fromPage = req.query.fromPage;
     const toPage = req.query.toPage;
-
+    console.log(fromPage, toPage, email, symbol);
     const id = hexEncode(`${symbol}:${email}`).trim();
 
     const holding = await transactionCollection

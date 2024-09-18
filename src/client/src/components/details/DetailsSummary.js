@@ -76,19 +76,27 @@ const DetailsSummary = (props) => {
       {summaryData !== null ? (
         <div className="details-grid-container">
           <div className="holding-value">
-            <div className="value">${summaryData.holdingValue}</div>
+            <div className="value">
+              ${parseFloat(Number(summaryData.holdingValue).toFixed(2))}
+            </div>
             <div className="title">Holding Value</div>
           </div>
           <div className="holding-quantity">
-            <div className="value">{summaryData.holdingQuantity}</div>
+            <div className="value">
+              {parseFloat(Number(summaryData.holdingQuantity).toFixed(8))}
+            </div>
             <div className="title">Holding Quantity</div>
           </div>
           <div className="total-cost">
-            <div className="value">${summaryData.totalCost}</div>
+            <div className="value">
+              ${parseFloat(Number(summaryData.totalCost).toFixed(2))}
+            </div>
             <div className="title">Total Cost</div>
           </div>
           <div className="average-cost">
-            <div className="value">${summaryData.avgCost}</div>
+            <div className="value">
+              ${parseFloat(Number(summaryData.avgCost).toFixed(2))}
+            </div>
             <div className="title">Average Net Cost</div>
           </div>
           <div className="total-profit">

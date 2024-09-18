@@ -1,24 +1,19 @@
 import "./TransactionTable.css";
 import { store } from "../../redux/store";
 import { hideAddTransaction } from "../../redux/actions";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BACKEND_URL } from "../../utils/constants";
 import axios from "axios";
+
 const TransactionTable = (props) => {
+  const email = store.getState().addUserReducer.email;
   const [data, setData] = useState();
   const [page, setPage] = useState(1);
   const [row, setRow] = useState(10);
   const [numberOfPage, setNumberOfPage] = useState();
   const [pageList, setPageList] = useState();
 
-  function handlePageNumber(event) {
-    console.log(event.target.value);
-  }
   useEffect(() => {
-    const email = store.getState().addUserReducer.email;
-    const fromPage = (Number(row) * (Number(page) - 1)) / 10;
-    const toPage = (Number(row) * Number(page)) / 10;
-    console.log(fromPage, toPage);
     axios
       .get(`${BACKEND_URL}/transaction/numberOfPage`, {
         params: {
@@ -36,7 +31,10 @@ const TransactionTable = (props) => {
         setPageList(_pageList);
       })
       .catch(console.error());
-    axios
+  }, []);
+
+  const setTable = useCallback(async (fromPage, toPage) => {
+    const response = await axios
       .get(`${BACKEND_URL}/transaction/table`, {
         params: {
           email: email,
@@ -45,11 +43,41 @@ const TransactionTable = (props) => {
           toPage: toPage,
         },
       })
-      .then((response) => {
-        console.log(response.data);
-      })
       .catch(console.error());
+    const tableList = [];
+    response.data.map((data) => {
+      data.transactions.map((transaction) => {
+        console.log(transaction);
+        let date, time;
+        if (transaction.datetime !== undefined) {
+          const datetime = transaction.datetime.split("T");
+          [date, time] = datetime;
+          console.log(date, time);
+        }
+        tableList.push(
+          <tr>
+            <td className="id">{tableList.length + 1}</td>
+            <td className="type">{transaction.type}</td>
+            <td className="price">${parseFloat(Number(transaction.price))}</td>
+            <td className="quantity">{transaction.quantity}</td>
+            <td className="datetime">
+              {date} {time}
+            </td>
+            <td className="cost">${parseFloat(Number(transaction.cost))}</td>
+            <td className="action">Actions</td>
+          </tr>
+        );
+      });
+      setData(tableList);
+    });
   }, []);
+
+  useEffect(() => {
+    const fromPage = (Number(row) * (Number(page) - 1)) / 10;
+    const toPage = (Number(row) * Number(page)) / 10;
+    setTable(fromPage, toPage);
+  }, [setTable, page, row]);
+
   return (
     <div className="transaction-table">
       <div className="title">
@@ -83,12 +111,23 @@ const TransactionTable = (props) => {
       <div className="row-setting">
         <div className="number-row">
           <p>Page</p>
-          <select onChange={handlePageNumber}>{pageList}</select>
+
+          <select
+            onChange={(event) => {
+              setPage(event.target.value);
+            }}
+          >
+            {pageList}
+          </select>
           <p style={{ marginLeft: "10px" }}>of {numberOfPage}</p>
         </div>
         <div className="number-row">
           <p>Rows</p>
-          <select>
+          <select
+            onChange={(event) => {
+              setRow(event.target.value);
+            }}
+          >
             <option>10</option>
             <option>20</option>
             <option>30</option>
