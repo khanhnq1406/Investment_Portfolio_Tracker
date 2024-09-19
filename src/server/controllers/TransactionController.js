@@ -40,8 +40,6 @@ class TransactionController {
 
         await transactionCollection.insertOne({
           coinHoldingId: id,
-          page: 1,
-          count: 1,
           transactions: [
             {
               type: type,
@@ -84,46 +82,18 @@ class TransactionController {
         await userCollection.updateOne(filter, updateDoc);
 
         filter = { coinHoldingId: id };
-        const transactions = await transactionCollection
-          .find(filter)
-          .sort({ $natural: -1 })
-          .limit(1)
-          .toArray();
-        const transaction = transactions[0];
-        if (Number(transaction.count) < 10) {
-          filter = { _id: transaction._id };
-          updateDoc = {
-            $set: {
-              page: transaction.page,
-              count: Number(transaction.count) + 1,
+        updateDoc = {
+          $push: {
+            transactions: {
+              type: type,
+              price: Number(price),
+              cost: Number(total),
+              datetime: datetime,
+              quantity: Number(quantity),
             },
-            $push: {
-              transactions: {
-                type: type,
-                price: Number(price),
-                cost: Number(total),
-                datetime: datetime,
-                quantity: quantity,
-              },
-            },
-          };
-          await transactionCollection.updateOne(filter, updateDoc);
-        } else {
-          await transactionCollection.insertOne({
-            coinHoldingId: id,
-            page: Number(transaction.page) + 1,
-            count: 1,
-            transactions: [
-              {
-                type: type,
-                price: Number(price),
-                cost: Number(total),
-                datetime: datetime,
-                quantity: quantity,
-              },
-            ],
-          });
-        }
+          },
+        };
+        await transactionCollection.updateOne(filter, updateDoc);
       }
       return res
         .status(STATUS_CODE.CREATED)
@@ -140,17 +110,27 @@ class TransactionController {
   async table(req, res) {
     const email = req.query.email;
     const symbol = req.query.symbol;
-    const fromPage = req.query.fromPage;
-    const toPage = req.query.toPage;
+    const row = Number(req.query.row);
+    const page = Number(req.query.page);
+    const limit = row * page;
     const id = hexEncode(`${symbol}:${email}`).trim();
 
-    const holding = await transactionCollection
-      .find({
-        coinHoldingId: id,
-        page: { $gt: Number(fromPage), $lte: Number(toPage) },
-      })
+    const transactions = await transactionCollection
+      .aggregate([
+        {
+          $match: { coinHoldingId: id },
+        },
+        {
+          $project: {
+            _id: null,
+            transactions: {
+              $reverseArray: { $slice: ["$transactions", limit - row, limit] },
+            },
+          },
+        },
+      ])
       .toArray();
-    res.json(holding);
+    res.json(transactions[0]);
   }
 
   // [GET] /transaction/numberOfPage
@@ -158,10 +138,17 @@ class TransactionController {
     const email = req.query.email;
     const symbol = req.query.symbol;
     const id = hexEncode(`${symbol}:${email}`).trim();
-    const numberOfPage = await transactionCollection.count({
-      coinHoldingId: id,
-    });
-    res.json(numberOfPage);
+    const counter = await transactionCollection
+      .aggregate([
+        {
+          $match: { coinHoldingId: id },
+        },
+        {
+          $project: { _id: null, counter: { $size: "$transactions" } },
+        },
+      ])
+      .toArray();
+    res.json(counter[0].counter);
   }
 }
 

@@ -12,7 +12,7 @@ const TransactionTable = (props) => {
   const [row, setRow] = useState(10);
   const [numberOfPage, setNumberOfPage] = useState();
   const [pageList, setPageList] = useState();
-  const [rawNumberOfPage, setRawNumberOfPage] = useState();
+  const [transactionLength, setTransactionLength] = useState();
 
   const createPageList = useCallback(async (_numberOfPage) => {
     const _pageList = [];
@@ -20,6 +20,7 @@ const TransactionTable = (props) => {
       _pageList.push(<option key={index + 1}>{index + 1}</option>);
     }
     setPageList(_pageList);
+    setPage(1);
     setNumberOfPage(_numberOfPage);
   }, []);
 
@@ -32,77 +33,76 @@ const TransactionTable = (props) => {
         },
       })
       .then((response) => {
-        const _numberOfPage = response.data;
-        setRawNumberOfPage(_numberOfPage);
+        setTransactionLength(response.data);
+        const _numberOfPage = Math.ceil(response.data / row);
         createPageList(_numberOfPage);
       })
       .catch(console.error());
   }, []);
 
-  const setTable = useCallback(async (fromPage, toPage) => {
+  const setTable = useCallback(async (_page, _row) => {
+    console.log(row);
     const response = await axios
       .get(`${BACKEND_URL}/transaction/table`, {
         params: {
           email: email,
           symbol: props.id,
-          fromPage: fromPage,
-          toPage: toPage,
+          row: _row,
+          page: _page,
         },
       })
       .catch(console.error());
     const tableList = [];
-    response.data.map((data) => {
-      data.transactions.map((transaction) => {
-        let date, time;
-        if (transaction.datetime !== undefined) {
-          const datetime = transaction.datetime.split("T");
-          [date, time] = datetime;
-        }
-        tableList.push(
-          <tr>
-            <td className="id">{tableList.length + 1}</td>
-            <td
-              className="type"
-              style={{
-                color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
-              }}
-            >
-              {transaction.type}
-            </td>
-            <td className="price">${parseFloat(Number(transaction.price))}</td>
-            <td
-              className="quantity"
-              style={{
-                color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
-              }}
-            >
-              {transaction.quantity}
-            </td>
-            <td className="datetime">
-              {date} {time}
-            </td>
-            <td className="cost">${parseFloat(Number(transaction.cost))}</td>
-            <td className="actions">
-              <div>
-                <button className="edit-transaction">
-                  <img src="/icon/editing.png" />
-                </button>
-                <button className="delete-transaction">
-                  <img src="/icon/remove.png" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        );
-      });
-      setData(tableList);
+    console.log(response.data);
+    const data = response.data;
+    data.transactions.map((transaction) => {
+      let date, time;
+      if (transaction.datetime !== undefined) {
+        const datetime = transaction.datetime.split("T");
+        [date, time] = datetime;
+      }
+      tableList.push(
+        <tr>
+          <td className="id">{tableList.length + 1}</td>
+          <td
+            className="type"
+            style={{
+              color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
+            }}
+          >
+            {transaction.type}
+          </td>
+          <td className="price">${parseFloat(Number(transaction.price))}</td>
+          <td
+            className="quantity"
+            style={{
+              color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
+            }}
+          >
+            {transaction.quantity}
+          </td>
+          <td className="datetime">
+            {date} {time}
+          </td>
+          <td className="cost">${parseFloat(Number(transaction.cost))}</td>
+          <td className="actions">
+            <div>
+              <button className="edit-transaction">
+                <img src="/icon/editing.png" />
+              </button>
+              <button className="delete-transaction">
+                <img src="/icon/remove.png" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      );
     });
+    setData(tableList);
   }, []);
 
   useEffect(() => {
-    const fromPage = (Number(row) * (Number(page) - 1)) / 10;
-    const toPage = (Number(row) * Number(page)) / 10;
-    setTable(fromPage, toPage);
+    setTable(page, row);
   }, [setTable, page, row]);
 
   return (
@@ -154,7 +154,7 @@ const TransactionTable = (props) => {
             onChange={(event) => {
               const _row = Number(event.target.value);
               setRow(_row);
-              createPageList(Math.ceil((Number(rawNumberOfPage) * 10) / _row));
+              createPageList(Math.ceil(Number(transactionLength) / _row));
             }}
           >
             <option>10</option>
