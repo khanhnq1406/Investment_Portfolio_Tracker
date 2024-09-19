@@ -84,8 +84,14 @@ class TransactionController {
         await userCollection.updateOne(filter, updateDoc);
 
         filter = { coinHoldingId: id };
-        const transaction = await transactionCollection.findOne(filter);
+        const transactions = await transactionCollection
+          .find(filter)
+          .sort({ $natural: -1 })
+          .limit(1)
+          .toArray();
+        const transaction = transactions[0];
         if (Number(transaction.count) < 10) {
+          filter = { _id: transaction._id };
           updateDoc = {
             $set: {
               page: transaction.page,
@@ -123,6 +129,7 @@ class TransactionController {
         .status(STATUS_CODE.CREATED)
         .json({ message: "Transaction successful" });
     } catch (error) {
+      console.log(error);
       res
         .status(STATUS_CODE.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal Server Error" });

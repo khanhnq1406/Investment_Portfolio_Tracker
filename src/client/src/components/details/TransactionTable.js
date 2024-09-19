@@ -12,6 +12,16 @@ const TransactionTable = (props) => {
   const [row, setRow] = useState(10);
   const [numberOfPage, setNumberOfPage] = useState();
   const [pageList, setPageList] = useState();
+  const [rawNumberOfPage, setRawNumberOfPage] = useState();
+
+  const createPageList = useCallback(async (_numberOfPage) => {
+    const _pageList = [];
+    for (let index = 0; index < _numberOfPage; index++) {
+      _pageList.push(<option key={index + 1}>{index + 1}</option>);
+    }
+    setPageList(_pageList);
+    setNumberOfPage(_numberOfPage);
+  }, []);
 
   useEffect(() => {
     axios
@@ -23,12 +33,8 @@ const TransactionTable = (props) => {
       })
       .then((response) => {
         const _numberOfPage = response.data;
-        setNumberOfPage(_numberOfPage);
-        const _pageList = [];
-        for (let index = 0; index < _numberOfPage; index++) {
-          _pageList.push(<option key={index + 1}>{index + 1}</option>);
-        }
-        setPageList(_pageList);
+        setRawNumberOfPage(_numberOfPage);
+        createPageList(_numberOfPage);
       })
       .catch(console.error());
   }, []);
@@ -47,12 +53,10 @@ const TransactionTable = (props) => {
     const tableList = [];
     response.data.map((data) => {
       data.transactions.map((transaction) => {
-        console.log(transaction);
         let date, time;
         if (transaction.datetime !== undefined) {
           const datetime = transaction.datetime.split("T");
           [date, time] = datetime;
-          console.log(date, time);
         }
         tableList.push(
           <tr>
@@ -125,7 +129,9 @@ const TransactionTable = (props) => {
           <p>Rows</p>
           <select
             onChange={(event) => {
-              setRow(event.target.value);
+              const _row = Number(event.target.value);
+              setRow(_row);
+              createPageList(Math.ceil((Number(rawNumberOfPage) * 10) / _row));
             }}
           >
             <option>10</option>

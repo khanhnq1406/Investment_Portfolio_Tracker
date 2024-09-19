@@ -65,7 +65,9 @@ const PortfolioTable = () => {
             <td className="average">
               ${parseFloat(holding.avgPrice.toFixed(2))}
             </td>
-            <td className="total">${holding.totalCost}</td>
+            <td className="total">
+              ${parseFloat(Number(holding.totalCost).toFixed(2))}
+            </td>
             <td className="actions">
               <div>
                 <button
