@@ -73,4 +73,8 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  .details-grid-container div {
+    width: 30vw;
+  }
 }

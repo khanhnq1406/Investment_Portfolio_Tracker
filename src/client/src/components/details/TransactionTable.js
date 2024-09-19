@@ -61,20 +61,36 @@ const TransactionTable = (props) => {
         tableList.push(
           <tr>
             <td className="id">{tableList.length + 1}</td>
-            <td className="type">{transaction.type}</td>
+            <td
+              className="type"
+              style={{
+                color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
+              }}
+            >
+              {transaction.type}
+            </td>
             <td className="price">${parseFloat(Number(transaction.price))}</td>
-            <td className="quantity">{transaction.quantity}</td>
+            <td
+              className="quantity"
+              style={{
+                color: transaction.type === "Buy" ? "#00A445" : "#C3151C",
+              }}
+            >
+              {transaction.quantity}
+            </td>
             <td className="datetime">
               {date} {time}
             </td>
             <td className="cost">${parseFloat(Number(transaction.cost))}</td>
             <td className="actions">
-              <button className="edit-transaction">
-                <img src="/icon/editing.png" />
-              </button>
-              <button className="delete-transaction">
-                <img src="/icon/remove.png" />
-              </button>
+              <div>
+                <button className="edit-transaction">
+                  <img src="/icon/editing.png" />
+                </button>
+                <button className="delete-transaction">
+                  <img src="/icon/remove.png" />
+                </button>
+              </div>
             </td>
           </tr>
         );

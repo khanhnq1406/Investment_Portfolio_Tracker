@@ -67,6 +67,10 @@
   justify-content: center;
 }
 
+.transaction-table table tr td.actions div {
+  display: flex;
+}
+
 .transaction-table table tr td.actions button {
   background-color: transparent;
   display: flex;
@@ -83,4 +87,66 @@
 
 .transaction-table table tr td.actions button img {
   width: 15px;
+}
+
+@media only screen and (max-width: 850px) {
+  .transaction-table table thead tr {
+    display: none;
+  }
+  .transaction-table table td {
+    border: none;
+  }
+  .transaction-table table {
+    table-layout: fixed;
+  }
+  .transaction-table table tbody tr {
+    word-wrap: break-word;
+  }
+
+  .transaction-table table tbody td {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .transaction-table table tbody td * {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-end;
+    margin: 0;
+  }
+  .transaction-table table tr td.actions {
+    justify-content: space-between;
+  }
+  .transaction-table table tr td.actions div {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: fit-content;
+  }
+  .transaction-table table td:before {
+    font-weight: 600;
+  }
+  .transaction-table table td:nth-of-type(1):before {
+    content: "#";
+  }
+  .transaction-table table td:nth-of-type(2):before {
+    content: "Type";
+  }
+  .transaction-table table td:nth-of-type(3):before {
+    content: "Price";
+  }
+  .transaction-table table td:nth-of-type(4):before {
+    content: "Quantity";
+  }
+  .transaction-table table td:nth-of-type(5):before {
+    content: "Date & Time";
+  }
+  .transaction-table table td:nth-of-type(6):before {
+    content: "Cost";
+  }
+  .transaction-table table td:nth-of-type(7):before {
+    content: "Actions";
+  }
 }
