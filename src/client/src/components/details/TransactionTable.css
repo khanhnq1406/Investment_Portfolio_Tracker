@@ -61,3 +61,26 @@
   text-align: center;
   padding: 5px 0px;
 }
+
+.transaction-table table tr td.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.transaction-table table tr td.actions button {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  padding: 5px 5px;
+  align-content: center;
+  border: 0;
+}
+
+.transaction-table table tr td.actions button:hover {
+  background-color: #1b232d;
+  border-radius: 3px;
+}
+
+.transaction-table table tr td.actions button img {
+  width: 15px;
+}

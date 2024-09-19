@@ -68,7 +68,14 @@ const TransactionTable = (props) => {
               {date} {time}
             </td>
             <td className="cost">${parseFloat(Number(transaction.cost))}</td>
-            <td className="action">Actions</td>
+            <td className="actions">
+              <button className="edit-transaction">
+                <img src="/icon/editing.png" />
+              </button>
+              <button className="delete-transaction">
+                <img src="/icon/remove.png" />
+              </button>
+            </td>
           </tr>
         );
       });
