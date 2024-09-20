@@ -26,8 +26,23 @@ const AddTransaction = () => {
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
     const price = event.target["price"].value;
-    const datetime = event.target["datetime"].value;
+    let datetime = event.target["datetime"].value;
     const type = event.nativeEvent.submitter.name;
+    console.log(datetime);
+    if (datetime === "") {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month =
+        now.getMonth() + 1 > 10
+          ? now.getMonth() + 1
+          : "0" + (now.getMonth() + 1);
+      const date = now.getDate() > 10 ? now.getDate() : "0" + now.getDate();
+      const hour = now.getHours();
+      const minute =
+        now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+      datetime = year + "-" + month + "-" + date;
+      datetime += "T" + hour + ":" + minute;
+    }
     try {
       const email = store.getState().addUserReducer.email;
       const response = await axios.post(
@@ -102,15 +117,16 @@ const AddTransaction = () => {
                     cryptoName: event.target.value,
                   }));
                 }}
+                required
               ></input>
             </div>
             <div className="form-group total-spent">
               <div>Total spent (USD)</div>
-              <input type="text" name="total"></input>
+              <input type="text" name="total" required></input>
             </div>
             <div className="form-group quantity">
               <div>Quantity</div>
-              <input type="text" name="quantity"></input>
+              <input type="text" name="quantity" required></input>
             </div>
             <div className="form-group price-per-coin">
               <div>
@@ -124,6 +140,7 @@ const AddTransaction = () => {
                 name="price"
                 value={cryptoPrice}
                 onChange={handleChangeCryptoPrice}
+                required
               ></input>
             </div>
             <div className="form-group date-time">
@@ -158,6 +175,7 @@ const AddTransaction = () => {
                 store.dispatch(unhideAddTransaction());
                 setCryptoPrice("");
                 setAddTransactionState(ADD_TRANSACTION_STATE.Input);
+                window.location.reload();
               }}
             >
               Done
