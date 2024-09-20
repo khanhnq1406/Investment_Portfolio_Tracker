@@ -55,7 +55,7 @@ const TransactionTable = (props) => {
     const tableList = [];
     console.log(response.data);
     const data = response.data;
-    data.transactions.map((transaction) => {
+    data.map((transaction) => {
       let date, time;
       if (transaction.datetime !== undefined) {
         const datetime = transaction.datetime.split("T");

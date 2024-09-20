@@ -40,15 +40,11 @@ class TransactionController {
 
         await transactionCollection.insertOne({
           coinHoldingId: id,
-          transactions: [
-            {
-              type: type,
-              price: Number(price),
-              cost: Number(total),
-              datetime: datetime,
-              quantity: quantity,
-            },
-          ],
+          type: type,
+          price: Number(price),
+          cost: Number(total),
+          datetime: datetime,
+          quantity: Number(quantity),
         });
       } else {
         const holdingQuantityUpdate =
@@ -81,19 +77,16 @@ class TransactionController {
         };
         await userCollection.updateOne(filter, updateDoc);
 
-        filter = { coinHoldingId: id };
         updateDoc = {
-          $push: {
-            transactions: {
-              type: type,
-              price: Number(price),
-              cost: Number(total),
-              datetime: datetime,
-              quantity: Number(quantity),
-            },
-          },
+          coinHoldingId: id,
+          type: type,
+          price: Number(price),
+          cost: Number(total),
+          datetime: datetime,
+          quantity: Number(quantity),
         };
-        await transactionCollection.updateOne(filter, updateDoc);
+
+        await transactionCollection.insertOne(updateDoc);
       }
       return res
         .status(STATUS_CODE.CREATED)
@@ -114,23 +107,13 @@ class TransactionController {
     const page = Number(req.query.page);
     const limit = row * page;
     const id = hexEncode(`${symbol}:${email}`).trim();
-
     const transactions = await transactionCollection
-      .aggregate([
-        {
-          $match: { coinHoldingId: id },
-        },
-        {
-          $project: {
-            _id: null,
-            transactions: {
-              $reverseArray: { $slice: ["$transactions", limit - row, limit] },
-            },
-          },
-        },
-      ])
+      .find({ coinHoldingId: id })
+      .sort({ _id: -1 })
+      .skip(limit - row)
+      .limit(limit)
       .toArray();
-    res.json(transactions[0]);
+    res.json(transactions);
   }
 
   // [GET] /transaction/numberOfPage
@@ -138,17 +121,8 @@ class TransactionController {
     const email = req.query.email;
     const symbol = req.query.symbol;
     const id = hexEncode(`${symbol}:${email}`).trim();
-    const counter = await transactionCollection
-      .aggregate([
-        {
-          $match: { coinHoldingId: id },
-        },
-        {
-          $project: { _id: null, counter: { $size: "$transactions" } },
-        },
-      ])
-      .toArray();
-    res.json(counter[0].counter);
+    const counter = await transactionCollection.count({ coinHoldingId: id });
+    res.json(counter);
   }
 }
 
