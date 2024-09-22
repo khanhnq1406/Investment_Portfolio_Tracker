@@ -26,6 +26,9 @@ export const STATUS_CODE = {
 
 export const LOCAL_STORAGE_TOKEN_NAME = "token";
 
-export const BACKEND_URL = "http://localhost:5000";
+export const BACKEND_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_DEV
+    : process.env.REACT_APP_PROD;
 
 export default REGISTER_STATE;
