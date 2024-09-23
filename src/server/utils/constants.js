@@ -36,3 +36,9 @@ exports.COLLECTION = COLLECTION;
 
 const CRYPTO_PRICE_URL = "https://api.binance.com/api/v1/ticker/price?symbol=";
 exports.CRYPTO_PRICE_URL = CRYPTO_PRICE_URL;
+
+const REDIS_URL =
+  process.env.NODE_ENV === "development"
+    ? `redis://${DOCKER_HOST}:6379`
+    : process.env.REDIS_URL;
+exports.REDIS_URL = REDIS_URL;
