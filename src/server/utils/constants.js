@@ -46,5 +46,5 @@ exports.REDIS_URL = REDIS_URL;
 const SOCKET =
   process.env.NODE_ENV === "development"
     ? `localhost:3000`
-    : `${process.env.RENDER_HOST}`;
+    : `${process.env.CLIENT_HOST}`;
 exports.SOCKET = SOCKET;
