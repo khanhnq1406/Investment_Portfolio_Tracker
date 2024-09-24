@@ -37,7 +37,7 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
           window.location.reload();
         }
       } catch (error) {
-        console.log("Internal server error");
+        alert("Failed to delete transaction. Please try again.");
       }
     }
   };

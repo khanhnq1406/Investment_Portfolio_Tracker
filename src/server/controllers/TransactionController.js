@@ -132,7 +132,6 @@ class TransactionController {
     const { id, cost, price, quantity, symbol } = req.body;
     const email = req.email;
 
-    console.log(id, cost, price, quantity, symbol);
     const coinHoldingId = hexEncode(`${symbol}:${email}`).trim();
     const coinHolding = await holdingCollection.findOne({ _id: coinHoldingId });
     if (coinHolding !== null) {
@@ -160,9 +159,7 @@ class TransactionController {
         },
       };
       await userCollection.updateOne(filter, updateDoc);
-      console.log("Updated");
     }
-    console.log(id);
     const objectId = new ObjectId(id);
     const isDeleted = await transactionCollection.deleteOne({
       _id: objectId,
