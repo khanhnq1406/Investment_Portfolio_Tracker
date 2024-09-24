@@ -6,7 +6,6 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import "./App.css";
 import Details from "./views/Details";
 function App() {
-  console.log("Running on port:", process.env.PORT);
   return (
     <AuthContextProvider>
       <Router>

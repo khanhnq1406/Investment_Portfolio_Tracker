@@ -2,8 +2,9 @@ import "./TransactionTable.css";
 import { store } from "../../redux/store";
 import { hideAddTransaction } from "../../redux/actions";
 import { useCallback, useEffect, useState } from "react";
-import { BACKEND_URL } from "../../utils/constants";
+import { BACKEND_URL, CONFIRMATION_TYPE } from "../../utils/constants";
 import axios from "axios";
+import Confirmation from "../layout/Confirmation";
 
 const TransactionTable = (props) => {
   const email = store.getState().addUserReducer.email;
@@ -13,6 +14,7 @@ const TransactionTable = (props) => {
   const [numberOfPage, setNumberOfPage] = useState();
   const [pageList, setPageList] = useState();
   const [transactionLength, setTransactionLength] = useState();
+  const [confirmation, setConfirmation] = useState();
 
   const createPageList = useCallback(async (_numberOfPage) => {
     const _pageList = [];
@@ -40,6 +42,25 @@ const TransactionTable = (props) => {
       .catch(console.error());
   }, []);
 
+  const closeConfirmationBox = () => {
+    setConfirmation(null);
+  };
+
+  const deleteTransaction = (event, id, cost, price, quantity) => {
+    setConfirmation(
+      <Confirmation
+        closeConfirmationBox={closeConfirmationBox}
+        payload={{
+          type: CONFIRMATION_TYPE.DELETE_TRANSACTION,
+          id: id,
+          cost: cost,
+          price: price,
+          quantity: quantity,
+          symbol: props.id,
+        }}
+      />
+    );
+  };
   const setTable = useCallback(async (_page, _row) => {
     console.log(row);
     const response = await axios
@@ -90,7 +111,18 @@ const TransactionTable = (props) => {
               <button className="edit-transaction">
                 <img src="/icon/editing.png" />
               </button>
-              <button className="delete-transaction">
+              <button
+                className="delete-transaction"
+                onClick={(e) =>
+                  deleteTransaction(
+                    e,
+                    transaction._id,
+                    transaction.cost,
+                    transaction.price,
+                    transaction.quantity
+                  )
+                }
+              >
                 <img src="/icon/remove.png" />
               </button>
             </div>
@@ -107,6 +139,7 @@ const TransactionTable = (props) => {
 
   return (
     <div className="transaction-table">
+      {confirmation}
       <div className="title">
         <div className="content">Transactions</div>
         <button

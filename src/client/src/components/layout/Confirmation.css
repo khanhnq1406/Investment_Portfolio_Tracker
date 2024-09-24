@@ -1,0 +1,70 @@
+.confirmation-container {
+  display: flex;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #f5f7fd;
+  z-index: 999;
+}
+
+.confirmation-popup {
+  background-color: #1a1e23;
+  width: 50%;
+  height: fit-content;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.confirmation-popup .content {
+  width: 100%;
+}
+.confirmation-popup .content .confirmation-title {
+  font-weight: 700;
+  margin: 15px;
+  font-size: 25px;
+  text-align: center;
+}
+.confirmation-popup .content .confirmation-message {
+  text-align: center;
+}
+
+.cancel-btn {
+  background-color: #2c3745;
+  color: #f5f7fd;
+  border: none;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 1vh 2vw;
+  font-size: 2.5vh;
+}
+
+.cancel-btn:hover {
+  background-color: #404d5e;
+}
+
+.confirmation-popup .submit-btn {
+  background-color: #c3151c;
+  color: #f5f7fd;
+  border: none;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 1vh 2vw;
+  font-size: 2.5vh;
+}
+
+.confirmation-popup .submit-btn:hover {
+  background-color: #c7292e;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px;
+}

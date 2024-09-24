@@ -8,6 +8,7 @@ router.post(
   verifyToken,
   transactionController.addTransaction
 );
+router.post("/delete", verifyToken, transactionController.delete);
 
 router.get("/table", verifyToken, transactionController.table);
 router.get("/numberOfPage", verifyToken, transactionController.numberOfPage);

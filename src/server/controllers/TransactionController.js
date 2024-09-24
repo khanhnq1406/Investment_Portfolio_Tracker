@@ -5,6 +5,8 @@ const {
 } = require("../utils/mongoClient");
 const { STATUS_CODE } = require("../utils/constants");
 const { hexEncode } = require("../utils/hexConvertor");
+const { BSON, EJSON, ObjectId } = require("bson");
+
 class TransactionController {
   // [GET] /transaction/addTransaction
   async addTransaction(req, res) {
@@ -123,6 +125,57 @@ class TransactionController {
     const id = hexEncode(`${symbol}:${email}`).trim();
     const counter = await transactionCollection.count({ coinHoldingId: id });
     res.json(counter);
+  }
+
+  // [POST] /transaction/deleteTransaction
+  async delete(req, res) {
+    const { id, cost, price, quantity, symbol } = req.body;
+    const email = req.email;
+
+    console.log(id, cost, price, quantity, symbol);
+    const coinHoldingId = hexEncode(`${symbol}:${email}`).trim();
+    const coinHolding = await holdingCollection.findOne({ _id: coinHoldingId });
+    if (coinHolding !== null) {
+      const holdingQuantityUpdate =
+        Number(coinHolding.holdingQuantity) - Number(quantity);
+      const totalCostUpdate = Number(coinHolding.totalCost) - Number(cost);
+      const avgPriceUpdate =
+        Number(totalCostUpdate) / Number(holdingQuantityUpdate);
+
+      let filter = { _id: coinHoldingId };
+
+      let updateDoc = {
+        $set: {
+          holdingQuantity: holdingQuantityUpdate,
+          totalCost: totalCostUpdate,
+          avgPrice: avgPriceUpdate,
+        },
+      };
+      await holdingCollection.updateOne(filter, updateDoc);
+
+      filter = { email: email };
+      updateDoc = {
+        $inc: {
+          totalInvested: -Number(cost),
+        },
+      };
+      await userCollection.updateOne(filter, updateDoc);
+      console.log("Updated");
+    }
+    console.log(id);
+    const objectId = new ObjectId(id);
+    const isDeleted = await transactionCollection.deleteOne({
+      _id: objectId,
+    });
+    if (isDeleted.deletedCount) {
+      return res
+        .status(STATUS_CODE.OK)
+        .json({ message: "Transaction deleted" });
+    } else {
+      return res
+        .status(STATUS_CODE.NOT_FOUND)
+        .json({ message: "Cannot delete transaction" });
+    }
   }
 }
 

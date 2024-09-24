@@ -31,4 +31,8 @@ export const BACKEND_URL =
     ? process.env.REACT_APP_DEV
     : process.env.REACT_APP_PROD;
 
+export const CONFIRMATION_TYPE = {
+  DELETE_TRANSACTION: 1,
+};
+
 export default REGISTER_STATE;
