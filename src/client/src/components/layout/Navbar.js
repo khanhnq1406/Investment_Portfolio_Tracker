@@ -9,22 +9,24 @@ const Navbar = () => {
   const [navigateDisplay, setNavigateDisplay] = useState("none");
   return (
     <div className="navbar">
-      <div className="logo">
-        <div className="menu">
-          <button
-            onClick={(e) =>
-              setNavigateDisplay(navigateDisplay === "none" ? "flex" : "none")
-            }
-          >
-            <img src="/icon/menu-vertical.png" />
-          </button>
+      <a className="logo-navigate" href="/">
+        <div className="logo">
+          <div className="menu">
+            <button
+              onClick={(e) =>
+                setNavigateDisplay(navigateDisplay === "none" ? "flex" : "none")
+              }
+            >
+              <img src="/icon/menu-vertical.png" />
+            </button>
+          </div>
+          <img src="/icon/bitcoin.png" />
+          <div className="title">BitHodling</div>
         </div>
-        <img src="/icon/bitcoin.png" />
-        <div className="title">BitHodling</div>
-      </div>
+      </a>
 
       <div className="navigate" style={{ display: navigateDisplay }}>
-        <a className="dashboard" href="#home">
+        <a className="dashboard" href="/">
           Dashboard
         </a>
         <hr className="navigate-line" style={{ display: navigateDisplay }} />
