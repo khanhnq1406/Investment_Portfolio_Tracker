@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BACKEND_URL, CONFIRMATION_TYPE } from "../../utils/constants";
 import axios from "axios";
 import Confirmation from "../layout/Confirmation";
+import EditTransaction from "../layout/EditTransaction";
 
 const TransactionTable = (props) => {
   const email = store.getState().addUserReducer.email;
@@ -15,6 +16,7 @@ const TransactionTable = (props) => {
   const [pageList, setPageList] = useState();
   const [transactionLength, setTransactionLength] = useState();
   const [confirmation, setConfirmation] = useState();
+  const [editBox, setEditBox] = useState();
 
   const createPageList = useCallback(async (_numberOfPage) => {
     const _pageList = [];
@@ -61,8 +63,36 @@ const TransactionTable = (props) => {
       />
     );
   };
+  const closeEditBox = () => {
+    setEditBox(null);
+  };
+
+  const editTransaction = (
+    event,
+    id,
+    cost,
+    price,
+    quantity,
+    datetime,
+    type
+  ) => {
+    setEditBox(
+      <EditTransaction
+        closeEditBox={closeEditBox}
+        payload={{
+          id,
+          cost,
+          price,
+          quantity,
+          datetime,
+          symbol: props.id,
+          type,
+        }}
+      />
+    );
+  };
+
   const setTable = useCallback(async (_page, _row) => {
-    console.log(row);
     const response = await axios
       .get(`${BACKEND_URL}/transaction/table`, {
         params: {
@@ -74,7 +104,6 @@ const TransactionTable = (props) => {
       })
       .catch(console.error());
     const tableList = [];
-    console.log(response.data);
     const data = response.data;
     data.map((transaction) => {
       let date, time;
@@ -108,7 +137,20 @@ const TransactionTable = (props) => {
           <td className="cost">${parseFloat(Number(transaction.cost))}</td>
           <td className="actions">
             <div>
-              <button className="edit-transaction">
+              <button
+                className="edit-transaction"
+                onClick={(e) =>
+                  editTransaction(
+                    e,
+                    transaction._id,
+                    transaction.cost,
+                    transaction.price,
+                    transaction.quantity,
+                    transaction.datetime,
+                    transaction.type
+                  )
+                }
+              >
                 <img src="/icon/editing.png" />
               </button>
               <button
@@ -140,6 +182,7 @@ const TransactionTable = (props) => {
   return (
     <div className="transaction-table">
       {confirmation}
+      {editBox}
       <div className="title">
         <div className="content">Transactions</div>
         <button

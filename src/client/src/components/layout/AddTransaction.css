@@ -131,3 +131,16 @@
   width: 100%;
   padding: 0;
 }
+
+.form-group.type select {
+  background-color: #111317;
+  color: #f5f7fd;
+  font-weight: 200;
+  font-size: 14px;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  border: rgba(245, 247, 253, 0.5) solid 1px;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  width: 100%;
+}

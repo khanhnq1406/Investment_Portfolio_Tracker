@@ -127,7 +127,7 @@ class TransactionController {
     res.json(counter);
   }
 
-  // [POST] /transaction/deleteTransaction
+  // [POST] /transaction/delete
   async delete(req, res) {
     const { id, cost, price, quantity, symbol } = req.body;
     const email = req.email;
@@ -172,6 +172,148 @@ class TransactionController {
       return res
         .status(STATUS_CODE.NOT_FOUND)
         .json({ message: "Cannot delete transaction" });
+    }
+  }
+
+  // [POST] /transaction/edit
+  async edit(req, res) {
+    const { _id, coinName, cost, quantity, price, datetime, type } = req.body;
+    const email = req.email;
+    const coinHoldingId = hexEncode(`${coinName}:${email}`).trim();
+    try {
+      const coinHolding = await holdingCollection.findOne({
+        _id: coinHoldingId,
+      });
+      console.log(coinHolding);
+
+      const objectId = new ObjectId(_id);
+      const transaction = await transactionCollection.findOne({
+        _id: objectId,
+      });
+      console.log(transaction);
+
+      const isChangeType = () => {
+        return transaction.type !== type;
+      };
+
+      let filter, updateDoc;
+
+      let holdingQuantityUpdate = Number(coinHolding.holdingQuantity);
+      let totalCostUpdate = Number(coinHolding.totalCost);
+      if (
+        parseFloat(Number(transaction.quantity).toFixed(8)) !==
+        parseFloat(Number(quantity).toFixed(8))
+      ) {
+        if (isChangeType()) {
+          holdingQuantityUpdate += parseFloat(
+            type === "Buy"
+              ? Number(transaction.quantity).toFixed(8)
+              : -Number(transaction.quantity).toFixed(8)
+          );
+        }
+        const changedQuantity =
+          parseFloat(Number(quantity).toFixed(8)) -
+          parseFloat(Number(transaction.quantity).toFixed(8));
+
+        holdingQuantityUpdate +=
+          type === "Buy" ? Number(changedQuantity) : -Number(changedQuantity);
+      }
+      if (
+        parseFloat(Number(transaction.cost).toFixed(8)) !==
+        parseFloat(Number(cost).toFixed(8))
+      ) {
+        const changedCost =
+          parseFloat(Number(cost).toFixed(8)) -
+          parseFloat(Number(transaction.cost).toFixed(8));
+
+        if (isChangeType()) {
+          totalCostUpdate += parseFloat(
+            type === "Buy"
+              ? Number(transaction.cost).toFixed(8)
+              : -Number(transaction.cost).toFixed(8)
+          );
+
+          filter = { email: email };
+          updateDoc = {
+            $inc: {
+              totalInvested:
+                type === "Buy"
+                  ? Number(transaction.cost) + Number(changedCost)
+                  : -Number(transaction.cost) - Number(changedCost),
+            },
+          };
+          await userCollection.updateOne(filter, updateDoc);
+        } else {
+          filter = { email: email };
+          updateDoc = {
+            $inc: {
+              totalInvested:
+                type === "Buy" ? Number(changedCost) : -Number(changedCost),
+            },
+          };
+          await userCollection.updateOne(filter, updateDoc);
+        }
+        totalCostUpdate +=
+          type === "Buy" ? Number(changedCost) : -Number(changedCost);
+      }
+
+      if (
+        holdingQuantityUpdate !== coinHolding.holdingQuantity ||
+        totalCostUpdate !== coinHolding.totalCost
+      ) {
+        const avgPriceUpdate =
+          type === "Buy"
+            ? Number(totalCostUpdate) / Number(holdingQuantityUpdate)
+            : Number(coinHolding.avgPrice);
+        filter = { _id: coinHoldingId };
+        updateDoc = {
+          $set: {
+            holdingQuantity: holdingQuantityUpdate,
+            totalCost: totalCostUpdate,
+            avgPrice: avgPriceUpdate,
+          },
+        };
+        await holdingCollection.updateOne(filter, updateDoc);
+      } else if (isChangeType()) {
+        filter = { _id: coinHoldingId };
+        updateDoc = {
+          $inc: {
+            holdingQuantity:
+              type === "Buy" ? Number(quantity) * 2 : -Number(quantity) * 2,
+            totalCost: type === "Buy" ? Number(cost) * 2 : -Number(cost) * 2,
+          },
+        };
+        await holdingCollection.updateOne(filter, updateDoc);
+
+        filter = { email: email };
+        updateDoc = {
+          $inc: {
+            totalInvested:
+              type === "Buy" ? Number(cost) * 2 : -Number(cost) * 2,
+          },
+        };
+        await userCollection.updateOne(filter, updateDoc);
+      }
+
+      filter = { _id: objectId };
+
+      updateDoc = {
+        $set: {
+          type: type,
+          price: Number(price),
+          cost: Number(cost),
+          datetime: datetime,
+          quantity: Number(quantity),
+        },
+      };
+
+      await transactionCollection.updateOne(filter, updateDoc);
+      return res.status(STATUS_CODE.OK).json(req.body);
+    } catch (error) {
+      console.log(error);
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        message: "Internal Server Error",
+      });
     }
   }
 }

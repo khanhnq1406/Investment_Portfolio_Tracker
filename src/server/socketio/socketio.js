@@ -18,7 +18,6 @@ function socketio(server) {
     console.log(`User ${socket.id} connected`);
 
     socket.on("fetchData", async (data) => {
-      console.log(data);
       const email = data.email;
       const user = await userCollection.findOne({ email: email });
       let totalBalance = 0;
@@ -46,9 +45,7 @@ function socketio(server) {
         holdingList: holdingList,
         holdingTable: holdingTable,
       };
-      console.log(socket.id);
       io.to(socket.id).emit("fetchDataResponse", responseData);
-      console.log(responseData);
     });
 
     socket.on("getPrice", async (data) => {

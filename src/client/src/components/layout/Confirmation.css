@@ -15,7 +15,7 @@
 
 .confirmation-popup {
   background-color: #1a1e23;
-  width: 50%;
+  width: fit-content;
   height: fit-content;
   border-radius: 10px;
   padding: 20px;
