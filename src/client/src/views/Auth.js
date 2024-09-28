@@ -4,7 +4,7 @@ import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import Spinner from "react-bootstrap/Spinner";
+import Loading from "../components/layout/Loading";
 const Auth = ({ authRoute }) => {
   const {
     authState: { authLoading, isAuthenticated },
@@ -13,8 +13,8 @@ const Auth = ({ authRoute }) => {
   let body;
   if (authLoading)
     body = (
-      <div className="d-flex justify-content-center mt-2">
-        <Spinner animation="border" variant="info" />
+      <div>
+        <Loading display="flex" />
       </div>
     );
   else if (isAuthenticated) return <Navigate to="/" />;

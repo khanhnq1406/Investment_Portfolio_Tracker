@@ -17,6 +17,8 @@
 }
 
 .navbar .logo .title {
+  color: #f5f7fd;
+  text-decoration: none;
   font-style: italic;
   font-size: 20px;
   font-weight: 500;

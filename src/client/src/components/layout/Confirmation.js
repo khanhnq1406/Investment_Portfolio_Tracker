@@ -27,7 +27,6 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
       document.getElementsByClassName("loading-container")[0].style.display =
         "flex";
-      console.log(payload);
       try {
         const response = await axios.post(`${BACKEND_URL}/transaction/delete`, {
           id: payload.id,

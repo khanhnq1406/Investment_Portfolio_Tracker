@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import Spinner from "react-bootstrap/Spinner";
+import Loading from "../components/layout/Loading";
 
 const ProtectedRoute = ({ children, redirectTo }) => {
   const {
@@ -10,8 +10,8 @@ const ProtectedRoute = ({ children, redirectTo }) => {
 
   if (authLoading)
     return (
-      <div className="spinner-container">
-        <Spinner animation="border" variant="info" />
+      <div>
+        <Loading display="flex" />
       </div>
     );
 

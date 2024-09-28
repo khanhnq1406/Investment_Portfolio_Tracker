@@ -1,7 +1,7 @@
 import "./Loading.css";
-const Loading = () => {
+const Loading = ({ display }) => {
   return (
-    <div className="loading-container">
+    <div className="loading-container" style={{ display }}>
       <div className="loading-popup">
         <img src="/icon/loading.gif" />
         <div className="loading-text">Loading . . .</div>
