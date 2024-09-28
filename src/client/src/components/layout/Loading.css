@@ -1,5 +1,5 @@
 .loading-container {
-  display: flex;
+  display: none;
   position: fixed;
   top: 0px;
   right: 0px;
@@ -10,7 +10,7 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
   color: #f5f7fd;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .loading-popup {

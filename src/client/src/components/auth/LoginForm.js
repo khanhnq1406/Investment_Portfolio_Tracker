@@ -5,18 +5,26 @@ import "./AuthForm.css";
 
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "../layout/Loading";
+import { hideLoading, unhideLoading } from "../../utils/SetLoading";
 
 const LoginForm = () => {
   const { loginUser } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const loadingContainer =
+    document.getElementsByClassName("loading-container")[0];
   async function handleSubmitLogin(event) {
     event.preventDefault();
     const email = event.target["email"].value;
     const password = event.target["password"].value;
+    unhideLoading(loadingContainer);
     const response = await loginUser(email, password);
     if (response.status !== STATUS_CODE.OK) {
+      hideLoading(loadingContainer);
       setErrorMessage(response.message);
+    } else {
+      hideLoading(loadingContainer);
     }
   }
   const redirectToRegister = () => {
@@ -28,6 +36,7 @@ const LoginForm = () => {
   };
   return (
     <div className="wrapper">
+      <Loading />
       <div className="container login">
         <div className="form login">
           <div className="title">Login to continue</div>

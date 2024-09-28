@@ -6,12 +6,14 @@ import {
 } from "../../utils/constants";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "./Loading";
+import { hideLoading, unhideLoading } from "../../utils/SetLoading";
 const Confirmation = ({ closeConfirmationBox, payload }) => {
-  console.log(payload);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [submitMessage, setSubmitMessage] = useState("");
-
+  const loadingContainer =
+    document.getElementsByClassName("loading-container")[0];
   useEffect(() => {
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
       setTitle("Delete the transaction?");
@@ -23,6 +25,7 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
   const submitBtnHandle = async (event) => {
     event.preventDefault();
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
+      unhideLoading(loadingContainer);
       console.log(payload);
       try {
         const response = await axios.post(`${BACKEND_URL}/transaction/delete`, {
@@ -34,9 +37,11 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
         });
 
         if (response.status === STATUS_CODE.OK) {
+          hideLoading(loadingContainer);
           window.location.reload();
         }
       } catch (error) {
+        hideLoading(loadingContainer);
         alert("Failed to delete transaction. Please try again.");
       }
     }
@@ -44,6 +49,7 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
   return (
     <div className="confirmation-container">
       <div className="confirmation-popup">
+        <Loading />
         <div className="content">
           <div className="confirmation-title">{title}</div>
           <div className="confirmation-message">{message}</div>

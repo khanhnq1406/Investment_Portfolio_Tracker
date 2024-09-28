@@ -6,16 +6,19 @@ import {
 } from "../../utils/constants";
 import axios from "axios";
 import { useState } from "react";
+import Loading from "./Loading";
+import { hideLoading, unhideLoading } from "../../utils/SetLoading";
 const EditTransaction = ({ closeEditBox, payload }) => {
-  console.log(payload);
   const [cryptoPrice, setCryptoPrice] = useState(payload.price);
   const [payloadState, setPayloadState] = useState(payload);
   const [addTransactionState, setAddTransactionState] = useState(
     ADD_TRANSACTION_STATE.Input
   );
-
+  const loadingContainer =
+    document.getElementsByClassName("loading-container")[0];
   async function handleAddTransaction(event) {
     event.preventDefault();
+    unhideLoading(loadingContainer);
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
@@ -49,10 +52,12 @@ const EditTransaction = ({ closeEditBox, payload }) => {
       });
       if (response.status === STATUS_CODE.OK) {
         // setAddTransactionState(ADD_TRANSACTION_STATE.Success);
+        hideLoading(loadingContainer);
         console.log(response);
         window.location.reload();
       }
     } catch (error) {
+      hideLoading(loadingContainer);
       alert("Failed to edit transaction. Please try again.");
     }
   }
@@ -75,6 +80,7 @@ const EditTransaction = ({ closeEditBox, payload }) => {
   }
   return (
     <div className="add-transaction-container" style={{ display: "flex" }}>
+      <Loading />
       {addTransactionState === ADD_TRANSACTION_STATE.Input ? (
         <div className="transaction-popup">
           <button

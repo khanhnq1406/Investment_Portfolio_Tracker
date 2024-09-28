@@ -8,7 +8,11 @@ import axios from "axios";
 import { useState } from "react";
 import { store } from "../../redux/store";
 import { unhideAddTransaction } from "../../redux/actions";
+import Loading from "./Loading";
+import { hideLoading, unhideLoading } from "../../utils/SetLoading";
 const AddTransaction = () => {
+  const loadingContainer =
+    document.getElementsByClassName("loading-container")[0];
   const [transactionInfo, setTransactionInfo] = useState(
     store.getState().addTransactionDisplayReducer
   );
@@ -22,6 +26,7 @@ const AddTransaction = () => {
 
   async function handleAddTransaction(event) {
     event.preventDefault();
+    unhideLoading(loadingContainer);
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
@@ -58,9 +63,11 @@ const AddTransaction = () => {
         }
       );
       if (response.status === STATUS_CODE.CREATED) {
+        hideLoading(loadingContainer);
         setAddTransactionState(ADD_TRANSACTION_STATE.Success);
       }
     } catch (error) {
+      hideLoading(loadingContainer);
       if (error.response.status === STATUS_CODE.BAD_REQUEST) {
         alert(error.response.data.message);
       } else {
@@ -90,6 +97,7 @@ const AddTransaction = () => {
       className="add-transaction-container"
       style={{ display: `${transactionInfo.display}` }}
     >
+      <Loading />
       {addTransactionState === ADD_TRANSACTION_STATE.Input ? (
         <div className="transaction-popup">
           <button
