@@ -18,13 +18,16 @@ const LoginForm = () => {
     event.preventDefault();
     const email = event.target["email"].value;
     const password = event.target["password"].value;
-    unhideLoading(loadingContainer);
+    document.getElementsByClassName("loading-container")[0].style.display =
+      "flex";
     const response = await loginUser(email, password);
     if (response.status !== STATUS_CODE.OK) {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       setErrorMessage(response.message);
     } else {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
     }
   }
   const redirectToRegister = () => {

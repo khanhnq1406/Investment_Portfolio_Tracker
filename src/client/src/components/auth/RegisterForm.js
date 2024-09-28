@@ -38,21 +38,24 @@ const RegisterForm = () => {
 
     // Email validation
     try {
-      unhideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "flex";
       const response = await axios.post(`${BACKEND_URL}/auth/register`, {
         name: name,
         email: email,
         password: password,
       });
       if (response.status === STATUS_CODE.CREATED) {
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         setRegisterData({ name: name, email: email, password: password });
         setRegisterState(REGISTER_STATE.OTP);
         setErrorMessage("");
       }
     } catch (error) {
       console.log(error);
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       if (error.response.status === STATUS_CODE.BAD_REQUEST) {
         const elementMessage = (
           <div className="error-msg">{error.response.data.message}</div>
@@ -65,12 +68,14 @@ const RegisterForm = () => {
   async function handleResendOtp(event) {
     event.preventDefault();
     try {
-      unhideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "flex";
       const response = await axios.post(`${BACKEND_URL}/auth/resendOtp`, {
         email: registerData.email,
       });
       if (response.status === STATUS_CODE.CREATED) {
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         const message = "The OTP is re-sent to your email";
         const elementMessage = (
           <div className="error-msg notification">{message}</div>
@@ -78,7 +83,8 @@ const RegisterForm = () => {
         setErrorMessage(elementMessage);
       }
     } catch (error) {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       if (error.response.status === STATUS_CODE.NOT_FOUND) {
         const message =
           "Your register session has expired. Please refresh the page";
@@ -103,17 +109,20 @@ const RegisterForm = () => {
     event.preventDefault();
     const otp = event.target["otp"].value;
     try {
-      unhideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "flex";
       const response = await axios.post(`${BACKEND_URL}/auth/verifyOtp`, {
         otp: otp,
         email: registerData.email,
       });
       if (response.status === STATUS_CODE.CREATED) {
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         setRegisterState(REGISTER_STATE.Success);
       }
     } catch (error) {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       if (error.response.status === STATUS_CODE.NOT_FOUND) {
         const message =
           "Your register session has expired. Please refresh the page";

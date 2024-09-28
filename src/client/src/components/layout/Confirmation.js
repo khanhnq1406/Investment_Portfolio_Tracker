@@ -25,7 +25,8 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
   const submitBtnHandle = async (event) => {
     event.preventDefault();
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
-      unhideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "flex";
       console.log(payload);
       try {
         const response = await axios.post(`${BACKEND_URL}/transaction/delete`, {
@@ -37,11 +38,14 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
         });
 
         if (response.status === STATUS_CODE.OK) {
-          hideLoading(loadingContainer);
+          document.getElementsByClassName(
+            "loading-container"
+          )[0].style.display = "none";
           window.location.reload();
         }
       } catch (error) {
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         alert("Failed to delete transaction. Please try again.");
       }
     }

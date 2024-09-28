@@ -26,7 +26,8 @@ const AddTransaction = () => {
 
   async function handleAddTransaction(event) {
     event.preventDefault();
-    unhideLoading(loadingContainer);
+    document.getElementsByClassName("loading-container")[0].style.display =
+      "flex";
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
@@ -63,11 +64,13 @@ const AddTransaction = () => {
         }
       );
       if (response.status === STATUS_CODE.CREATED) {
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         setAddTransactionState(ADD_TRANSACTION_STATE.Success);
       }
     } catch (error) {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       if (error.response.status === STATUS_CODE.BAD_REQUEST) {
         alert(error.response.data.message);
       } else {

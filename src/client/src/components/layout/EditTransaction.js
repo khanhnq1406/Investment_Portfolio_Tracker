@@ -18,7 +18,8 @@ const EditTransaction = ({ closeEditBox, payload }) => {
     document.getElementsByClassName("loading-container")[0];
   async function handleAddTransaction(event) {
     event.preventDefault();
-    unhideLoading(loadingContainer);
+    document.getElementsByClassName("loading-container")[0].style.display =
+      "flex";
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
@@ -52,12 +53,14 @@ const EditTransaction = ({ closeEditBox, payload }) => {
       });
       if (response.status === STATUS_CODE.OK) {
         // setAddTransactionState(ADD_TRANSACTION_STATE.Success);
-        hideLoading(loadingContainer);
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
         console.log(response);
         window.location.reload();
       }
     } catch (error) {
-      hideLoading(loadingContainer);
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       alert("Failed to edit transaction. Please try again.");
     }
   }
