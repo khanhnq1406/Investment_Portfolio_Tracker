@@ -4,14 +4,16 @@ import axios from "axios";
 import Holdings from "./Holdings";
 import Performance from "./Performance";
 import "./Summary.css";
-import { BACKEND_URL } from "../../utils/constants";
+import { BACKEND_URL, EDIT_TYPE } from "../../utils/constants";
 import { store } from "../../redux/store";
 import { addSummaryData } from "../../redux/actions";
+import EditData from "../layout/EditData";
 
 export const socket = io.connect(BACKEND_URL);
 
 const Summary = () => {
   const [data, setData] = useState({});
+  const [editBox, setEditBox] = useState();
   useEffect(() => {
     const email = store.getState().addUserReducer.email;
 
@@ -58,8 +60,22 @@ const Summary = () => {
       );
     });
   }, [socket]);
+
+  const closeEditBox = () => {
+    setEditBox();
+  };
+  const handleEditBox = (event) => {
+    setEditBox(
+      <EditData
+        type={EDIT_TYPE.TOTAL_INVESTED}
+        payload={{ value: data.totalInvested }}
+        close={closeEditBox}
+      />
+    );
+  };
   return (
     <div className="summary">
+      {editBox}
       <div className="title">
         <div className="content">My Portfolio</div>
         <button>
@@ -70,6 +86,9 @@ const Summary = () => {
 
       <div className="grid-container">
         <div className="total-invested">
+          <button className="edit-btn" onClick={handleEditBox}>
+            <img src="/icon/editing.png" />
+          </button>
           <div className="value">
             ${Math.floor(Number(data.totalInvested) * 100) / 100}
           </div>

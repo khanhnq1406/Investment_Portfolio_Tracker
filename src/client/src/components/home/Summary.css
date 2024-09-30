@@ -119,6 +119,7 @@
 .performance {
   border: rgba(255, 255, 255, 0.5) solid 1px;
   border-radius: 5px;
+  position: relative;
 }
 
 .total-invested,
@@ -143,4 +144,30 @@
   font-size: 13px;
   opacity: 70%;
   margin-top: 3px;
+}
+
+.edit-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  padding: 5px;
+  margin: 2px;
+}
+
+.edit-btn:hover {
+  background-color: #2c3745;
+  border-radius: 3px;
+}
+
+.edit-btn img {
+  width: 15px;
+  height: 15px;
+}
+
+.edit-btn img {
+  width: 15px;
 }

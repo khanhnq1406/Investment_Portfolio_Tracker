@@ -7,23 +7,33 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
-import { hideLoading, unhideLoading } from "../../utils/SetLoading";
+
 const Confirmation = ({ closeConfirmationBox, payload }) => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [submitMessage, setSubmitMessage] = useState("");
-  const loadingContainer =
-    document.getElementsByClassName("loading-container")[0];
+
   useEffect(() => {
-    if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
-      setTitle("Delete the transaction?");
-      setMessage("You will not be able to recover it");
-      setSubmitMessage("Yes, delete it");
+    switch (payload.type) {
+      case CONFIRMATION_TYPE.DELETE_TRANSACTION:
+        setTitle("Delete the transaction?");
+        setMessage("You will not be able to recover it");
+        setSubmitMessage("Yes, delete it");
+        break;
+
+      case CONFIRMATION_TYPE.EDIT_TOTAL_INVESTED:
+        setTitle("Change the total invested value?");
+        setMessage("You will not be able to recover it");
+        setSubmitMessage("Yes, change it");
+        break;
+      default:
+        break;
     }
   }, []);
 
   const submitBtnHandle = async (event) => {
     event.preventDefault();
+
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
       document.getElementsByClassName("loading-container")[0].style.display =
         "flex";
@@ -47,6 +57,8 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
           "none";
         alert("Failed to delete transaction. Please try again.");
       }
+    } else if (payload.type === CONFIRMATION_TYPE.EDIT_TOTAL_INVESTED) {
+      console.log("edit");
     }
   };
   return (

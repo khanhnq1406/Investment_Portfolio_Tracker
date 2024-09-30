@@ -33,6 +33,11 @@ export const BACKEND_URL =
 
 export const CONFIRMATION_TYPE = {
   DELETE_TRANSACTION: 1,
+  EDIT_TOTAL_INVESTED: 2,
+};
+
+export const EDIT_TYPE = {
+  TOTAL_INVESTED: 1,
 };
 
 export default REGISTER_STATE;
