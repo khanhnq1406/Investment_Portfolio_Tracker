@@ -3,7 +3,7 @@ const {
   holdingCollection,
   transactionCollection,
 } = require("../utils/mongoClient");
-const { STATUS_CODE } = require("../utils/constants");
+const { STATUS_CODE, EDIT_TYPE } = require("../utils/constants");
 const { hexEncode } = require("../utils/hexConvertor");
 const { BSON, EJSON, ObjectId } = require("bson");
 
@@ -309,6 +309,92 @@ class TransactionController {
 
       await transactionCollection.updateOne(filter, updateDoc);
       return res.status(STATUS_CODE.OK).json(req.body);
+    } catch (error) {
+      console.log(error);
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  // [PATCH] /transaction/editTotalInvested
+  async editTotalInvested(req, res) {
+    const email = req.email;
+    const { value } = req.body;
+    try {
+      console.log(email, value);
+      const filter = { email: email };
+      const updateDoc = {
+        $set: {
+          totalInvested: Number(value),
+        },
+      };
+      const updated = await userCollection.updateOne(filter, updateDoc);
+      if (updated.matchedCount) {
+        return res
+          .status(STATUS_CODE.OK)
+          .json({ message: "Total Invested updated" });
+      } else {
+        return res
+          .status(STATUS_CODE.NOT_FOUND)
+          .json({ message: "Failed to update Total Invested" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  // [PATCH] /transaction/editCoinHolding
+  async editCoinHolding(req, res) {
+    const email = req.email;
+    const { value, symbol, type } = req.body;
+    const id = hexEncode(`${symbol}:${email}`).trim();
+    try {
+      const filter = { _id: id };
+      let updateDoc;
+      switch (type) {
+        case EDIT_TYPE.HOLDING_QUANTITY:
+          updateDoc = {
+            $set: {
+              holdingQuantity: Number(value),
+            },
+          };
+
+          break;
+
+        case EDIT_TYPE.TOTAL_COST:
+          updateDoc = {
+            $set: {
+              totalCost: Number(value),
+            },
+          };
+          break;
+
+        case EDIT_TYPE.AVG_COST:
+          updateDoc = {
+            $set: {
+              avgPrice: Number(value),
+            },
+          };
+          break;
+
+        default:
+          break;
+      }
+
+      const updated = await holdingCollection.updateOne(filter, updateDoc);
+      if (updated.matchedCount) {
+        return res
+          .status(STATUS_CODE.OK)
+          .json({ message: "Total Invested updated" });
+      } else {
+        return res
+          .status(STATUS_CODE.NOT_FOUND)
+          .json({ message: "Failed to update Total Invested" });
+      }
     } catch (error) {
       console.log(error);
       return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({

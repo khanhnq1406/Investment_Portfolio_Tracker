@@ -26,6 +26,24 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
         setMessage("You will not be able to recover it");
         setSubmitMessage("Yes, change it");
         break;
+
+      case CONFIRMATION_TYPE.HOLDING_QUANTITY:
+        setTitle("Change the holding quantity value?");
+        setMessage("You will not be able to recover it");
+        setSubmitMessage("Yes, change it");
+        break;
+
+      case CONFIRMATION_TYPE.TOTAL_COST:
+        setTitle("Change the total cost value?");
+        setMessage("You will not be able to recover it");
+        setSubmitMessage("Yes, change it");
+        break;
+
+      case CONFIRMATION_TYPE.AVG_COST:
+        setTitle("Change the average cost value?");
+        setMessage("You will not be able to recover it");
+        setSubmitMessage("Yes, change it");
+        break;
       default:
         break;
     }
@@ -33,10 +51,10 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
 
   const submitBtnHandle = async (event) => {
     event.preventDefault();
+    document.getElementsByClassName("loading-container")[0].style.display =
+      "flex";
 
     if (payload.type === CONFIRMATION_TYPE.DELETE_TRANSACTION) {
-      document.getElementsByClassName("loading-container")[0].style.display =
-        "flex";
       try {
         const response = await axios.post(`${BACKEND_URL}/transaction/delete`, {
           id: payload.id,
@@ -58,7 +76,55 @@ const Confirmation = ({ closeConfirmationBox, payload }) => {
         alert("Failed to delete transaction. Please try again.");
       }
     } else if (payload.type === CONFIRMATION_TYPE.EDIT_TOTAL_INVESTED) {
-      console.log("edit");
+      try {
+        const response = await axios.patch(
+          `${BACKEND_URL}/transaction/editTotalInvested`,
+          {
+            value: payload.value,
+          }
+        );
+
+        if (response.status === STATUS_CODE.OK) {
+          document.getElementsByClassName(
+            "loading-container"
+          )[0].style.display = "none";
+          window.location.reload();
+        } else {
+          alert("Failed to update Total Invested. Please try again.");
+        }
+      } catch (error) {
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
+        alert("Failed to update Total Invested. Please try again.");
+      }
+    } else if (
+      payload.type === CONFIRMATION_TYPE.HOLDING_QUANTITY ||
+      payload.type === CONFIRMATION_TYPE.TOTAL_COST ||
+      payload.type === CONFIRMATION_TYPE.AVG_COST
+    ) {
+      try {
+        const response = await axios.patch(
+          `${BACKEND_URL}/transaction/editCoinHolding`,
+          {
+            value: payload.value,
+            symbol: payload.symbol,
+            type: payload.type,
+          }
+        );
+
+        if (response.status === STATUS_CODE.OK) {
+          document.getElementsByClassName(
+            "loading-container"
+          )[0].style.display = "none";
+          window.location.reload();
+        } else {
+          alert("Failed to update Holding Quantity. Please try again.");
+        }
+      } catch (error) {
+        document.getElementsByClassName("loading-container")[0].style.display =
+          "none";
+        alert("Failed to update Holding Quantity. Please try again.");
+      }
     }
   };
   return (

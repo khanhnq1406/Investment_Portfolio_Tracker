@@ -48,3 +48,10 @@ const SOCKET =
     ? `http://localhost:3000`
     : `${process.env.CLIENT_HOST}`;
 exports.SOCKET = SOCKET;
+
+const EDIT_TYPE = {
+  HOLDING_QUANTITY: 3,
+  TOTAL_COST: 4,
+  AVG_COST: 5,
+};
+exports.EDIT_TYPE = EDIT_TYPE;

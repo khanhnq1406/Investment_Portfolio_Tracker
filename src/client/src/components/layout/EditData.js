@@ -15,6 +15,18 @@ const EditData = (props) => {
         setTitle("Total Invested");
         break;
 
+      case EDIT_TYPE.HOLDING_QUANTITY:
+        setTitle("Holding Quantity");
+        break;
+
+      case EDIT_TYPE.TOTAL_COST:
+        setTitle("Total Cost");
+        break;
+
+      case EDIT_TYPE.AVG_COST:
+        setTitle("Average Cost");
+        break;
+
       default:
         break;
     }
@@ -26,12 +38,53 @@ const EditData = (props) => {
 
   const handleEdit = (event) => {
     event.preventDefault();
-    setConfirmationBox(
-      <Confirmation
-        closeConfirmationBox={closeConfirmationBox}
-        payload={{ type: CONFIRMATION_TYPE.EDIT_TOTAL_INVESTED }}
-      />
-    );
+    switch (type) {
+      case EDIT_TYPE.TOTAL_INVESTED:
+        setConfirmationBox(
+          <Confirmation
+            closeConfirmationBox={closeConfirmationBox}
+            payload={{
+              type: CONFIRMATION_TYPE.EDIT_TOTAL_INVESTED,
+              value: value,
+            }}
+          />
+        );
+        break;
+
+      case EDIT_TYPE.HOLDING_QUANTITY:
+      case EDIT_TYPE.TOTAL_COST:
+      case EDIT_TYPE.AVG_COST:
+        let confirmationType = 0;
+        switch (type) {
+          case EDIT_TYPE.HOLDING_QUANTITY:
+            confirmationType = CONFIRMATION_TYPE.HOLDING_QUANTITY;
+            break;
+
+          case EDIT_TYPE.TOTAL_COST:
+            confirmationType = CONFIRMATION_TYPE.TOTAL_COST;
+            break;
+
+          case EDIT_TYPE.AVG_COST:
+            confirmationType = CONFIRMATION_TYPE.AVG_COST;
+            break;
+
+          default:
+            break;
+        }
+        setConfirmationBox(
+          <Confirmation
+            closeConfirmationBox={closeConfirmationBox}
+            payload={{
+              type: confirmationType,
+              value: value,
+              symbol: payload.symbol,
+            }}
+          />
+        );
+        break;
+      default:
+        break;
+    }
   };
   return (
     <div className="edit-container">

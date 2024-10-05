@@ -34,10 +34,16 @@ export const BACKEND_URL =
 export const CONFIRMATION_TYPE = {
   DELETE_TRANSACTION: 1,
   EDIT_TOTAL_INVESTED: 2,
+  HOLDING_QUANTITY: 3,
+  TOTAL_COST: 4,
+  AVG_COST: 5,
 };
 
 export const EDIT_TYPE = {
   TOTAL_INVESTED: 1,
+  HOLDING_QUANTITY: 2,
+  TOTAL_COST: 3,
+  AVG_COST: 4,
 };
 
 export default REGISTER_STATE;
