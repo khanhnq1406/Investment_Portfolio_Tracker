@@ -42,7 +42,10 @@ const PortfolioTable = () => {
             <td className="holdings-row">
               <p className="holdings-value">${holdingValue}</p>
               <p className="holdings-unit">
-                {parseFloat(holding.holdingQuantity.toFixed(8))} {holding.name}
+                {holding.holdingQuantity !== null
+                  ? parseFloat(holding.holdingQuantity.toFixed(8))
+                  : 0}{" "}
+                {holding.name}
               </p>
             </td>
             {profitLoss > 0 ? (
@@ -63,7 +66,10 @@ const PortfolioTable = () => {
             )}
 
             <td className="average">
-              ${parseFloat(holding.avgPrice.toFixed(2))}
+              $
+              {holding.avgPrice !== null
+                ? parseFloat(holding.avgPrice.toFixed(2))
+                : 0}
             </td>
             <td className="total">
               ${parseFloat(Number(holding.totalCost).toFixed(2))}
