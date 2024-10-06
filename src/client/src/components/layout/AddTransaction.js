@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { store } from "../../redux/store";
-import { unhideAddTransaction } from "../../redux/actions";
+import { hideAddTransaction, unhideAddTransaction } from "../../redux/actions";
 import Loading from "./Loading";
 import { hideLoading, unhideLoading } from "../../utils/SetLoading";
 const AddTransaction = () => {
@@ -127,6 +127,9 @@ const AddTransaction = () => {
                     ...currentTransactionInfo,
                     cryptoName: event.target.value,
                   }));
+                  store.dispatch(
+                    hideAddTransaction({ cryptoName: event.target.value })
+                  );
                 }}
                 required
               ></input>
