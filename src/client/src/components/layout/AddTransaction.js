@@ -26,15 +26,22 @@ const AddTransaction = () => {
 
   async function handleAddTransaction(event) {
     event.preventDefault();
-    document.getElementsByClassName("loading-container")[0].style.display =
-      "flex";
+    // document.getElementsByClassName("loading-container")[0].style.display =
+    // "flex";
     const coinName = event.target["coin"].value;
     const total = event.target["total"].value;
     const quantity = event.target["quantity"].value;
     const price = event.target["price"].value;
     let datetime = event.target["datetime"].value;
     const type = event.nativeEvent.submitter.name;
-    console.log(datetime);
+    const isValidFetch = await fetch(
+      `https://www.binance.com/bapi/composite/v1/public/marketing/tardingPair/detail?symbol=${coinName}`
+    );
+    const isValidJson = await isValidFetch.json();
+    if (isValidJson.data.length === 0) {
+      alert("Coin symbol is unvalid. Please try again.");
+      return;
+    }
     if (datetime === "") {
       const now = new Date();
       const year = now.getFullYear();
