@@ -74,7 +74,7 @@ class TransactionController {
         filter = { email: email };
         updateDoc = {
           $inc: {
-            totalInvested: type === "Buy " ? Number(total) : -Number(total),
+            totalInvested: type === "Buy" ? Number(total) : -Number(total),
           },
         };
         await userCollection.updateOne(filter, updateDoc);
