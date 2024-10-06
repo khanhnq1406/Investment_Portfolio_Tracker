@@ -12,12 +12,12 @@ const DetailsSummary = (props) => {
   const [editBox, setEditBox] = useState();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://www.binance.com/bapi/composite/v1/public/marketing/tardingPair/detail?symbol=${props.id}`
-      )
-      .then((response) => {
-        setSymbol(response.data.data[0].symbol);
+    fetch(
+      `https://www.binance.com/bapi/composite/v1/public/marketing/tardingPair/detail?symbol=${props.id}`
+    )
+      .then(async (response) => {
+        const json = await response.json();
+        setSymbol(json.data[0].symbol);
       })
       .catch(console.error());
 
