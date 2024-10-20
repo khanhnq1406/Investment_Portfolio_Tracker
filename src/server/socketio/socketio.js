@@ -11,6 +11,7 @@ function socketio(server) {
   const io = new Server(server, {
     cors: {
       origin: SOCKET,
+      transports: ["websocket", "polling"],
     },
   });
 
