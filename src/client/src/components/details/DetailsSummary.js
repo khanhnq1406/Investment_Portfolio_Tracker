@@ -32,23 +32,29 @@ const DetailsSummary = (props) => {
       })
       .catch(console.error());
 
-    socket.emit("getPrice", {
-      currency: props.id,
-    });
+    fetch(`https://www.binance.com/api/v3/ticker/price?symbol=${props.id}USDT`)
+      .then(async (response) => {
+        const json = await response.json();
+        setPrice(parseFloat(Number(json.price)));
+      })
+      .catch(console.error());
+    // socket.emit("getPrice", {
+    //   currency: props.id,
+    // });
 
-    const interval = setInterval(() => {
-      socket.emit("getPrice", {
-        currency: props.id,
-      });
-    }, 10000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => {
+    //   socket.emit("getPrice", {
+    //     currency: props.id,
+    //   });
+    // }, 10000);
+    // return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    socket.on("getPriceResponse", (price) => {
-      setPrice(parseFloat(Number(price)));
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   socket.on("getPriceResponse", (price) => {
+  //     setPrice(parseFloat(Number(price)));
+  //   });
+  // }, [socket]);
 
   useEffect(() => {
     if (summaryData !== null) {

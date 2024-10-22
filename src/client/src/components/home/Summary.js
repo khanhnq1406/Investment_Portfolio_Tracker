@@ -9,7 +9,7 @@ import { store } from "../../redux/store";
 import { addSummaryData } from "../../redux/actions";
 import EditData from "../layout/EditData";
 
-export const socket = io.connect(BACKEND_URL);
+// export const socket = io.connect(BACKEND_URL);
 
 const Summary = () => {
   const [data, setData] = useState({});
@@ -36,30 +36,30 @@ const Summary = () => {
       );
     })().catch(console.error);
 
-    const interval = setInterval(() => {
-      socket.emit("fetchData", {
-        email: email,
-      });
-    }, 10000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => {
+    //   socket.emit("fetchData", {
+    //     email: email,
+    //   });
+    // }, 10000);
+    // return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    socket.on("fetchDataResponse", (data) => {
-      const totalProfit =
-        Number(data.currentBalance) - Number(data.totalInvested);
-      setData({
-        ...data,
-        totalProfit: Math.floor(totalProfit * 100) / 100,
-      });
-      store.dispatch(
-        addSummaryData({
-          ...data,
-          totalProfit: Math.floor(totalProfit * 100) / 100,
-        })
-      );
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   socket.on("fetchDataResponse", (data) => {
+  //     const totalProfit =
+  //       Number(data.currentBalance) - Number(data.totalInvested);
+  //     setData({
+  //       ...data,
+  //       totalProfit: Math.floor(totalProfit * 100) / 100,
+  //     });
+  //     store.dispatch(
+  //       addSummaryData({
+  //         ...data,
+  //         totalProfit: Math.floor(totalProfit * 100) / 100,
+  //       })
+  //     );
+  //   });
+  // }, [socket]);
 
   const closeEditBox = () => {
     setEditBox();
