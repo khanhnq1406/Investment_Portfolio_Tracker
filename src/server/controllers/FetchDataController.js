@@ -41,7 +41,6 @@ class FetchDataController {
       const valueB = Number(b.totalCost); // Same for the second object
       return valueB - valueA; // Sort in descending order
     });
-    console.log(sortedHoldingTable);
     res.status(STATUS_CODE.OK).json({
       totalInvested: user.totalInvested,
       currentBalance: totalBalance,

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { store } from "../../redux/store";
 import "./Navbar.css";
+import { hideAddTransaction } from "../../redux/actions";
 
 const Navbar = () => {
   const { logoutUser } = useContext(AuthContext);
@@ -36,7 +37,13 @@ const Navbar = () => {
           History
         </a>
         <hr className="navigate-line" style={{ display: navigateDisplay }} />
-        <a className="add-transaction" href="#home">
+        <a
+          className="add-transaction"
+          href="#"
+          onClick={(e) => {
+            store.dispatch(hideAddTransaction({ cryptoName: "" }));
+          }}
+        >
           Add Transaction
         </a>
         <hr className="navigate-line" style={{ display: navigateDisplay }} />
