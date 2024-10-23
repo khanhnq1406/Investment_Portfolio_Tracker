@@ -18,9 +18,13 @@ const Summary = () => {
     const email = store.getState().addUserReducer.email;
 
     (async () => {
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "flex";
       const response = await axios.get(`${BACKEND_URL}/fetch/summary`, {
         params: { email: email },
       });
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
       const totalProfit =
         Number(response.data.currentBalance) -
         Number(response.data.totalInvested);
@@ -34,7 +38,11 @@ const Summary = () => {
           totalProfit: Math.floor(totalProfit * 100) / 100,
         })
       );
-    })().catch(console.error);
+    })().catch((error) => {
+      document.getElementsByClassName("loading-container")[0].style.display =
+        "none";
+      console.log(error);
+    });
 
     // const interval = setInterval(() => {
     //   socket.emit("fetchData", {

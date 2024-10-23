@@ -28,6 +28,7 @@ const Holdings = () => {
           const percentage =
             Math.floor(
               (Number(index[Object.keys(index)[0]]) / Number(totalInvested)) *
+                100 *
                 100
             ) / 100;
           return `${Object.keys(index)[0]} ${percentage}%`;
