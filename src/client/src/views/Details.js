@@ -6,12 +6,14 @@ import { BACKEND_URL } from "../utils/constants";
 import { io } from "socket.io-client";
 import TransactionTable from "../components/details/TransactionTable";
 import AddTransaction from "../components/layout/AddTransaction";
+import CurrencyConverter from "../components/layout/CurrencyConverter";
 // export const socket = io.connect(BACKEND_URL);
 const Details = () => {
   const { id } = useParams();
   return (
     <div className="transaction-details">
       <AddTransaction />
+      <CurrencyConverter />
       <Navbar />
       <hr className="navbar-line" />
       <div className="details-container">
