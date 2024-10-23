@@ -31,11 +31,22 @@ class FetchDataController {
       const currentBalance = price * holdingQuantity;
       totalBalance += currentBalance;
     }
+    const sortedHoldingList = holdingList.sort((a, b) => {
+      const valueA = Object.values(a)[0]; // Get the value of the first (and only) property in the object
+      const valueB = Object.values(b)[0]; // Same for the second object
+      return valueB - valueA; // Sort in descending order
+    });
+    const sortedHoldingTable = holdingTable.sort((a, b) => {
+      const valueA = Number(a.totalCost); // Get the value of the first (and only) property in the object
+      const valueB = Number(b.totalCost); // Same for the second object
+      return valueB - valueA; // Sort in descending order
+    });
+    console.log(sortedHoldingTable);
     res.status(STATUS_CODE.OK).json({
       totalInvested: user.totalInvested,
       currentBalance: totalBalance,
-      holdingList: holdingList,
-      holdingTable: holdingTable,
+      holdingList: sortedHoldingList,
+      holdingTable: sortedHoldingTable,
     });
   }
 
