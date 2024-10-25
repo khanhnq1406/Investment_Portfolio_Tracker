@@ -84,7 +84,7 @@ class AuthController {
         const subject = "Email Verification";
         const message = `Your OTP code is: ${otp}`;
 
-        sendEmail(email, subject, message);
+        await sendEmail(email, subject, message);
         await client.set(email, JSON.stringify(values));
         client.expire(email, OTP_EXPIRE);
         console.log(otp);
@@ -115,7 +115,7 @@ class AuthController {
       const subject = "Email Verification";
       const message = `Your OTP code is: ${otp}`;
 
-      sendEmail(email, subject, message);
+      await sendEmail(email, subject, message);
       const oldOtpValues = JSON.parse(await client.get(email));
       if (oldOtpValues === null) {
         return res
@@ -193,7 +193,7 @@ class AuthController {
           console.log("OTP from DB: ", otp);
           const subject = "Email Verification";
           const message = `Your OTP code is: ${otp}`;
-          const sendEmail = await sendEmail(email, subject, message);
+          await sendEmail(email, subject, message);
           return res
             .status(STATUS_CODE.CREATED)
             .json({ message: "OTP successfully sent" });
@@ -204,7 +204,7 @@ class AuthController {
 
         const subject = "Email Verification";
         const message = `Your OTP code is: ${otp}`;
-        const sendEmail = await sendEmail(email, subject, message);
+        await sendEmail(email, subject, message);
         return res
           .status(STATUS_CODE.CREATED)
           .json({ message: "OTP successfully sent" });
@@ -228,7 +228,7 @@ class AuthController {
       const subject = "Email Verification";
       const message = `Your OTP code is: ${otp}`;
 
-      sendEmail(email, subject, message);
+      await sendEmail(email, subject, message);
       const oldOtpValues = JSON.parse(await client.get(redisKey));
       if (oldOtpValues === null) {
         return res
