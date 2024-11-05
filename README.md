@@ -6,6 +6,8 @@
 A smart, user-friendly and responsive website designed to help you effectively manage your investment portfolio.
 <br/>
 Visit website <a href="https://bithodling.vercel.app/">here</a>
+<br/>
+Watch promo video <a href="https://www.youtube.com/watch?v=_GNB6qP_Ars">here</a>
 </p>
 
 <div align='center'>
