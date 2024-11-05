@@ -32,6 +32,24 @@ Visit website <a href="https://bithodling.vercel.app/">here</a>
     <img src="./system_design/Architecture.png" alt="Architecture"/>
 </div>
 
+## Promo Video
+
+<div style="display: flex; align-items: center; justify-content: center">
+  <a href="https://www.youtube.com/watch?v=_GNB6qP_Ars" target="_blank" style="position: relative">
+    <img src="https://img.youtube.com/vi/_GNB6qP_Ars/0.jpg" style="width: 100%;">
+    <div style="position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                justify-content: center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_play_button_icon_%282013%E2%80%932017%29.svg" 
+            style="width: 50px; height: auto; ">
+    </div>
+  </a>
+</div>
+
 ## Screenshots
 
 ### Login
