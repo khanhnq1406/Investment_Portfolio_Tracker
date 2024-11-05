@@ -87,3 +87,9 @@ Visit website <a href="https://bithodling.vercel.app/">here</a>
 <div  align='center'>
     <img style="max-width:700px;" src="./resource/readme/detailTable.png"/>
 </div>
+
+## Jira Tracking
+
+<div align='center'>
+    <img style="max-width:700px;" src="./resource/readme/jira_tracking.png">
+</div>
