@@ -34,9 +34,9 @@ Visit website <a href="https://bithodling.vercel.app/">here</a>
 
 ## Promo Video
 
-<div style="display: flex; align-items: center; justify-content: center; max-width:600px">
+<div align='center' style="display: flex; align-items: center; justify-content: center; max-width:600px">
   <a href="https://www.youtube.com/watch?v=_GNB6qP_Ars" target="_blank" style="position: relative">
-    <img src="https://img.youtube.com/vi/_GNB6qP_Ars/0.jpg" style="width: 100%;">
+    <img src="https://img.youtube.com/vi/_GNB6qP_Ars/0.jpg">
     <div style="position: absolute;
                 top: 0;
                 left: 0;
