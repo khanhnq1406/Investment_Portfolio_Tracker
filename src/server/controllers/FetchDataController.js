@@ -12,25 +12,31 @@ class FetchDataController {
   async summary(req, res) {
     const email = req.email;
     const user = await userCollection.findOne({ email: email });
+    const holdingIds = user.CoinHolding;
+    const holdings = await Promise.all(
+      holdingIds.map((id) => holdingCollection.findOne({ _id: id }))
+    );
+    const priceRequests = holdings.map((holding) =>
+      axios.get(`${CRYPTO_PRICE_URL}${holding.name}USDT`)
+    );
+    const priceResponses = await Promise.all(priceRequests);
+
     let totalBalance = 0;
-    let holdingList = [];
-    let holdingTable = [];
-    for (let i = 0; i < user.CoinHolding.length; i++) {
-      const holding = await holdingCollection
-        .find({
-          _id: user.CoinHolding[i],
-        })
-        .toArray();
-      const currency = holding[0].name;
-      const totalCost = holding[0].totalCost;
-      holdingList.push({ [`${currency}`]: totalCost });
-      const response = await axios.get(`${CRYPTO_PRICE_URL}${currency}USDT`);
-      const price = response.data.price;
-      holdingTable.push({ ...holding[0], price: price });
-      const holdingQuantity = holding[0].holdingQuantity;
-      const currentBalance = price * holdingQuantity;
-      totalBalance += currentBalance;
-    }
+    const holdingList = [];
+    const holdingTable = [];
+
+    holdings.forEach((holding, index) => {
+      const currency = holding.name;
+      const totalCost = holding.totalCost;
+      holdingList.push({ [currency]: totalCost });
+
+      const price = priceResponses[index].data.price;
+      holdingTable.push({ ...holding, price });
+
+      const holdingQuantity = holding.holdingQuantity;
+      totalBalance += price * holdingQuantity;
+    });
+
     const sortedHoldingList = holdingList.sort((a, b) => {
       const valueA = Object.values(a)[0]; // Get the value of the first (and only) property in the object
       const valueB = Object.values(b)[0]; // Same for the second object
