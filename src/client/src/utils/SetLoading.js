@@ -3,6 +3,5 @@ export const unhideLoading = (container) => {
 };
 
 export const hideLoading = (container) => {
-  console.log("hideLoading");
   container.style.display = "none";
 };

@@ -16,7 +16,6 @@ const ForgotPasswordForm = () => {
   async function handleSubmitEmail(event) {
     event.preventDefault();
     const email = event.target["email"].value;
-    console.log("Debug");
     try {
       const response = await axios.post(`${BACKEND_URL}/auth/forgotPassword`, {
         email: email,

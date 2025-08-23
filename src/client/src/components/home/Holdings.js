@@ -47,7 +47,7 @@ const Holdings = () => {
         plugins: {
           legend: {
             display: true,
-            position: "right",
+            position: "bottom",
             labels: {
               usePointStyle: true,
               boxHeight: 10,

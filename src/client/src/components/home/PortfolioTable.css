@@ -1,8 +1,8 @@
 .portfolio-table {
   color: #f5f7fd;
   background-color: transparent;
-  max-width: 1000px;
-  margin: 20px 10vw;
+  max-width: 1200px;
+  margin: 20px 5vw;
   width: 100%;
 }
 
@@ -156,15 +156,27 @@
     content: "Holdings";
   }
   .portfolio-table table td:nth-of-type(5):before {
-    content: "PNL";
+    content: "Total PNL";
   }
   .portfolio-table table td:nth-of-type(6):before {
-    content: "Average Cost";
+    content: "Unrealized PNL";
   }
   .portfolio-table table td:nth-of-type(7):before {
-    content: "Total Cost";
+    content: "Realized PNL";
   }
   .portfolio-table table td:nth-of-type(8):before {
+    content: "Average Cost";
+  }
+  .portfolio-table table td:nth-of-type(9):before {
+    content: "Total Invested";
+  }
+  .portfolio-table table td:nth-of-type(10):before {
+    content: "Remaining Cost";
+  }
+  .portfolio-table table td:nth-of-type(11):before {
+    content: "Sold";
+  }
+  .portfolio-table table td:nth-of-type(12):before {
     content: "Actions";
   }
 }

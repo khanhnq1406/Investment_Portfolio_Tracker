@@ -27,7 +27,6 @@ const CurrencyConverter = () => {
   const usdtToVnd = (event) => {
     const usdtValue = event.target.value;
     setUsdt(usdtValue);
-    console.log(usdtValue);
     const vnd = Number(usdtPrice) * Number(usdtValue);
 
     setVnd(vndFormat.format(parseInt(vnd)));

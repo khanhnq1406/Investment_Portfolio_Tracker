@@ -11,9 +11,7 @@ const PortfolioTable = () => {
     const selected = event.target.value.split(".");
     const selectType = selected[0];
     const selectParam = selected[1];
-    console.log(selectParam);
     if (selectType === "Details") {
-      console.log("Go to detail");
       navigate(`/details/${selectParam}`);
     }
   }
@@ -38,9 +36,9 @@ const PortfolioTable = () => {
           <tr>
             <td className="id">{index + 1}</td>
             <td className="coin">{holding.name}</td>
-            <td className="price">${parseFloat(Number(holding.price))}</td>
+            <td className="price">${holding.price}</td>
             <td className="holdings-row">
-              <p className="holdings-value">${holdingValue}</p>
+              <p className="holdings-value">${holding.holdingValue}</p>
               <p className="holdings-unit">
                 {holding.holdingQuantity !== null
                   ? parseFloat(holding.holdingQuantity.toFixed(8))
@@ -48,32 +46,37 @@ const PortfolioTable = () => {
                 {holding.name}
               </p>
             </td>
-            {profitLoss > 0 ? (
+            {holding.totalPNL > 0 ? (
               <td className="pnl" style={{ color: "#00A445" }}>
-                <p className="pnl-value">${profitLoss}</p>
-                <p className="pnl-percent">+{pnl}%</p>{" "}
+                <p className="pnl-value">${holding.totalPNL}</p>
+                <p className="pnl-percent">+{holding.totalPNLPercent}%</p>{" "}
               </td>
-            ) : profitLoss < 0 ? (
+            ) : holding.totalPNL < 0 ? (
               <td className="pnl" style={{ color: "#C3151C" }}>
-                <p className="pnl-value">${profitLoss}</p>
-                <p className="pnl-percent">{pnl}%</p>{" "}
+                <p className="pnl-value">${holding.totalPNL}</p>
+                <p className="pnl-percent">{holding.totalPNLPercent}%</p>{" "}
               </td>
             ) : (
               <td className="pnl">
-                <p className="pnl-value">${profitLoss}</p>
-                <p className="pnl-percent">{pnl}%</p>{" "}
+                <p className="pnl-value">${holding.totalPNL}</p>
+                <p className="pnl-percent">{holding.totalPNLPercent}%</p>{" "}
               </td>
             )}
 
+            <td className="unrealized-pnl">
+              ${holding.unrealizedPNL}
+            </td>
+
+            <td className="realized-pnl">
+             ${holding.realizedPNL}
+            </td>
+
             <td className="average">
-              $
-              {holding.avgPrice !== null
-                ? parseFloat(holding.avgPrice.toFixed(2))
-                : 0}
+              ${holding.avgPrice !== null ? parseFloat(holding.avgCost) : 0}
             </td>
-            <td className="total">
-              ${parseFloat(Number(holding.totalCost).toFixed(2))}
-            </td>
+            <td className="total">${holding.totalInvested}</td>
+            <td className="remaining-cost">${holding.remainingCostBasis}</td>
+            <td className="sold">${holding.sold}</td>
             <td className="actions">
               <div>
                 <button
@@ -108,9 +111,13 @@ const PortfolioTable = () => {
             <th>Coin</th>
             <th>Price</th>
             <th>Holdings</th>
-            <th>PNL</th>
+            <th>Total PNL</th>
+            <th>Unrealized PNL</th>
+            <th>Realized PNL</th>
             <th>Average Cost</th>
-            <th>Total Cost</th>
+            <th>Total Invested</th>
+            <th>Remaining Cost</th>
+            <th>Sold</th>
             <th>Actions</th>
           </tr>
         </thead>
